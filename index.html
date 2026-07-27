@@ -1,3 +1,28 @@
+จัดให้ครับ! ได้ทำการอัปเดตระบบใน **หน้าสกิล (Skill View)** โดยเพิ่ม **แท็บหมวดหมู่ (Tabs Filter)** เพื่อแบ่งประเภทสกิลให้ชัดเจนตามที่คุณต้องการ ดังนี้ครับ:
+
+### ⚔️ สิ่งที่ได้รับการอัปเดตในระบบสกิล:
+
+1. **ระบบแท็บหมวดหมู่ (Filter Tabs):**
+* **ทั้งหมด (All):** แสดงสกิลทุกประเภท
+* **สกิลโจมตี (Active / Attack):** สกิลที่กดใช้งานเพื่อทำความเสียหาย/สร้างผลลัพธ์
+* **สกิลติดตัว (Passive):** สกิลบัฟถาวรติดตัวละคร
+
+
+2. **ระบบเลือกประเภทสกิล:**
+* เพิ่มป้ายกำกับประเภทสกิล (`⚔️ โจมตี` / `🛡️ ติดตัว`) ให้เห็นเด่นชัด
+* ขณะเปิดใช้งาน **"✏️ แก้ไข"** จะมีเมนู Dropdown เลือกประเภทสกิลได้ทันที
+
+
+3. **การเพิ่มสกิลใหม่ (Add Skill):**
+* ปุ่มเพิ่มสกิลจะสร้างสกิลตาม **หมวดหมู่ที่เปิดอยู่ ณ ตอนนั้น** ให้อัตโนมัติ
+
+
+
+---
+
+### 📝 โค้ดฉบับเต็ม (คัดลอกทั้งหมดไปวางทับใน `index.html`):
+
+```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -24,7 +49,6 @@
             padding: 0;
         }
 
-        /* รักษาระยะเว้นวรรคและเว้นบรรทัดสำหรับข้อความแก้ไขได้ */
         .editable {
             white-space: pre-wrap;
             word-break: break-word;
@@ -35,10 +59,14 @@
             -webkit-user-select: text !important;
             outline: 2px dashed #ffeb3b !important;
             background: rgba(255, 235, 59, 0.2) !important;
-            padding: 2px 4px;
-            border-radius: 4px;
+            padding: 1px 3px;
+            border-radius: 3px;
             display: inline-block;
-            min-width: 20px;
+            min-width: 12px;
+        }
+
+        .editing-active .skill-type-select {
+            display: inline-block !important;
         }
 
         html, body {
@@ -78,7 +106,7 @@
         /* TOP HUD */
         .top-hud {
             position: relative; z-index: 20; background: #1b1328;
-            border-bottom: 3px solid #f2a63b; padding: 8px 10px;
+            border-bottom: 3px solid #f2a63b; padding: 6px 10px;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.6); gap: 6px;
         }
@@ -105,18 +133,23 @@
 
         .hero-stats { display: flex; flex-direction: column; gap: 2px; }
 
-        .stat-bar { display: flex; align-items: center; gap: 4px; font-size: 9px; font-weight: bold; }
+        .stat-bar { display: flex; align-items: center; gap: 4px; font-size: 8px; font-weight: bold; }
+        .stat-label { width: 22px; text-align: right; }
 
         .bar-bg {
-            width: 50px; height: 8px; background: #000;
+            width: 55px; height: 7px; background: #000;
             border: 1px solid #777; border-radius: 2px; overflow: hidden; position: relative;
         }
 
-        .bar-fill-hp { width: 100%; height: 100%; background: #e53935; }
-        .bar-fill-mp { width: 80%; height: 100%; background: #1e88e5; }
+        .bar-fill-hp { width: 100%; height: 100%; background: #e53935; transition: width 0.3s; }
+        .bar-fill-mp { width: 80%; height: 100%; background: #1e88e5; transition: width 0.3s; }
+        .bar-fill-sta { width: 90%; height: 100%; background: #fb8c00; transition: width 0.3s; }
+        .bar-fill-exp { width: 45%; height: 100%; background: #ab47bc; transition: width 0.3s; }
+
+        .stat-text { font-size: 8px; color: #ddd; font-family: monospace; }
 
         .gold-display {
-            font-family: 'Press Start 2P', cursive; font-size: 9px; color: #ffd700;
+            font-family: 'Press Start 2P', cursive; font-size: 8px; color: #ffd700;
             background: #0a0710; padding: 4px 6px; border: 2px solid #b8860b;
             border-radius: 4px; display: flex; align-items: center; gap: 4px; white-space: nowrap;
         }
@@ -266,14 +299,47 @@
         .status-name { color: #ffeb3b; font-weight: bold; }
         .status-val { color: #ffffff; font-family: 'Press Start 2P', cursive; font-size: 11px; }
 
+        /* VIEW: SKILL TREE & CATEGORY TABS */
         #skill-view { display: none; padding: 18px 14px; }
-        .skill-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        
+        .skill-tabs {
+            display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 2px solid #513e73; padding-bottom: 6px;
+        }
+
+        .skill-tab-btn {
+            background: #140d21; color: #b0bec5; border: 1px solid #513e73;
+            font-family: 'Prompt', sans-serif; font-size: 10px; font-weight: bold;
+            padding: 4px 8px; border-radius: 4px; cursor: pointer; flex: 1; text-align: center;
+        }
+
+        .skill-tab-btn.active {
+            background: #7b1fa2; color: #ffffff; border-color: #ffeb3b;
+            box-shadow: 0 0 6px rgba(255, 235, 59, 0.4);
+        }
+
+        .skill-list { display: flex; flex-direction: column; gap: 10px; }
+        
         .skill-item {
             background: #140d21; border: 2px solid #513e73; padding: 10px;
             border-radius: 4px; display: flex; justify-content: space-between; align-items: center;
         }
-        .skill-info { display: flex; flex-direction: column; gap: 2px; }
+
+        .skill-info { display: flex; flex-direction: column; gap: 3px; }
         .skill-title { color: #ffeb3b; font-weight: bold; font-size: 13px; }
+        
+        .skill-meta { display: flex; align-items: center; gap: 6px; }
+        
+        .skill-type-tag {
+            font-size: 9px; padding: 1px 5px; border-radius: 3px; font-weight: bold;
+        }
+        .skill-type-tag.active-type { background: #b71c1c; color: #fff; }
+        .skill-type-tag.passive-type { background: #00695c; color: #fff; }
+
+        .skill-type-select {
+            display: none; background: #000; color: #ffeb3b; border: 1px solid #777;
+            font-size: 9px; font-family: 'Prompt', sans-serif; border-radius: 3px; padding: 1px;
+        }
+
         .skill-lvl { color: #81c784; font-family: 'Press Start 2P', cursive; font-size: 9px; }
 
         .lvl-up-btn {
@@ -370,13 +436,37 @@
             
             <div class="top-right-stats">
                 <div class="hero-stats">
+                    <!-- HP -->
                     <div class="stat-bar">
-                        <span>HP</span>
-                        <div class="bar-bg"><div class="bar-fill-hp"></div></div>
+                        <span class="stat-label">HP</span>
+                        <div class="bar-bg"><div class="bar-fill-hp" id="bar-hp"></div></div>
+                        <span class="stat-text">
+                            <span class="editable" id="hp-cur" oninput="updateBars()">100</span>/<span class="editable" id="hp-max" oninput="updateBars()">100</span>
+                        </span>
                     </div>
+                    <!-- MP -->
                     <div class="stat-bar">
-                        <span>MP</span>
-                        <div class="bar-bg"><div class="bar-fill-mp"></div></div>
+                        <span class="stat-label">MP</span>
+                        <div class="bar-bg"><div class="bar-fill-mp" id="bar-mp"></div></div>
+                        <span class="stat-text">
+                            <span class="editable" id="mp-cur" oninput="updateBars()">80</span>/<span class="editable" id="mp-max" oninput="updateBars()">100</span>
+                        </span>
+                    </div>
+                    <!-- STAMINA -->
+                    <div class="stat-bar">
+                        <span class="stat-label">STA</span>
+                        <div class="bar-bg"><div class="bar-fill-sta" id="bar-sta"></div></div>
+                        <span class="stat-text">
+                            <span class="editable" id="sta-cur" oninput="updateBars()">90</span>/<span class="editable" id="sta-max" oninput="updateBars()">100</span>
+                        </span>
+                    </div>
+                    <!-- EXP -->
+                    <div class="stat-bar">
+                        <span class="stat-label">EXP</span>
+                        <div class="bar-bg"><div class="bar-fill-exp" id="bar-exp"></div></div>
+                        <span class="stat-text">
+                            Lv.<span class="editable" id="hero-lvl">5</span> (<span class="editable" id="exp-cur" oninput="updateBars()">450</span>/<span class="editable" id="exp-max" oninput="updateBars()">1000</span>)
+                        </span>
                     </div>
                 </div>
                 <div class="gold-display">
@@ -407,8 +497,8 @@
                 <div class="reward-box">
                     <strong>🎁 รางวัลภารกิจ:</strong>
                     <ul class="reward-list" id="reward-list">
-                        <li class="reward-item">• <span class="editable">500 Gold</span></li>
-                        <li class="reward-item">• <span class="editable">ดาบไม้ผู้กล้า x1</span></li>
+                        <li class="reward-item">• <span class="editable">500 Gold</span><button class="delete-btn" onclick="deleteItem(this)">🗑️</button></li>
+                        <li class="reward-item">• <span class="editable">ดาบไม้ผู้กล้า x1</span><button class="delete-btn" onclick="deleteItem(this)">🗑️</button></li>
                     </ul>
                     <button class="add-btn" id="add-reward-btn" onclick="addNewReward()">➕ เพิ่มของรางวัล</button>
                 </div>
@@ -419,7 +509,7 @@
             </div>
 
             <!-- VIEW 3: รายการภารกิจที่กำลังดำเนินการ -->
-            <div id="quest-list-view" class="pixel-box" onclick="skipQuestListTypewriter()">
+            <div id="quest-list-view" class="pixel-box" onclick="skipQuestListTypewriter(event)">
                 <div class="todo-header editable" id="text-quest-list-header">ACTIVE QUESTS</div>
                 <div id="active-quests-container">
                     <div class="active-quest-card" onclick="handleBoxClick(event, openTodoListView)">
@@ -446,10 +536,12 @@
                     <li class="quest-item" onclick="handleTaskClick(event, this)">
                         <div class="pixel-checkbox"></div>
                         <span class="editable">กำจัดสไลม์ป่า (0/10)</span>
+                        <button class="delete-btn" onclick="deleteItem(this); event.stopPropagation();">🗑️</button>
                     </li>
                     <li class="quest-item" onclick="handleTaskClick(event, this)">
                         <div class="pixel-checkbox"></div>
                         <span class="editable">คุยกับหัวหน้าหมู่บ้าน</span>
+                        <button class="delete-btn" onclick="deleteItem(this); event.stopPropagation();">🗑️</button>
                     </li>
                 </ul>
                 <button class="add-btn" id="add-task-btn" onclick="addNewTask()">➕ เพิ่มหัวข้อภารกิจใหม่</button>
@@ -471,14 +563,49 @@
                 <button class="add-btn" id="add-status-btn" onclick="addNewStatus()">➕ เพิ่มค่าสถานะใหม่</button>
             </div>
 
-            <!-- VIEW 6: SKILL -->
+            <!-- VIEW 6: SKILL WITH CATEGORY TABS -->
             <div id="skill-view" class="pixel-box">
                 <div class="todo-header editable" id="text-skill-header">SKILL TREE</div>
+                
+                <!-- แท็บแบ่งประเภทสกิล -->
+                <div class="skill-tabs">
+                    <button class="skill-tab-btn active" onclick="filterSkills('all', this)">🌐 ทั้งหมด</button>
+                    <button class="skill-tab-btn" onclick="filterSkills('active', this)">⚔️ สกิลโจมตี</button>
+                    <button class="skill-tab-btn" onclick="filterSkills('passive', this)">🛡️ สกิลติดตัว</button>
+                </div>
+
                 <div class="skill-list" id="skill-list">
-                    <div class="skill-item">
+                    <!-- สกิลโจมตี -->
+                    <div class="skill-item" data-type="active">
                         <div class="skill-info">
                             <span class="skill-title editable">🔥 Fireball (บอลเพลิง)</span>
-                            <span class="skill-lvl">Lv. <span class="lvl-num editable">1</span></span>
+                            <div class="skill-meta">
+                                <span class="skill-type-tag active-type">⚔️ โจมตี</span>
+                                <select class="skill-type-select" onchange="changeSkillType(this)">
+                                    <option value="active" selected>⚔️ โจมตี</option>
+                                    <option value="passive">🛡️ ติดตัว</option>
+                                </select>
+                                <span class="skill-lvl">Lv. <span class="lvl-num editable">1</span></span>
+                            </div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <button class="lvl-up-btn" onclick="upgradeSkill(this)">+1 Up</button>
+                            <button class="delete-btn" onclick="deleteItem(this)">🗑️</button>
+                        </div>
+                    </div>
+                    
+                    <!-- สกิลติดตัว -->
+                    <div class="skill-item" data-type="passive">
+                        <div class="skill-info">
+                            <span class="skill-title editable">🛡️ Iron Skin (ผิวเหล็กกล้า)</span>
+                            <div class="skill-meta">
+                                <span class="skill-type-tag passive-type">🛡️ ติดตัว</span>
+                                <select class="skill-type-select" onchange="changeSkillType(this)">
+                                    <option value="active">⚔️ โจมตี</option>
+                                    <option value="passive" selected>🛡️ ติดตัว</option>
+                                </select>
+                                <span class="skill-lvl">Lv. <span class="lvl-num editable">2</span></span>
+                            </div>
                         </div>
                         <div style="display:flex; align-items:center; gap:6px;">
                             <button class="lvl-up-btn" onclick="upgradeSkill(this)">+1 Up</button>
@@ -550,6 +677,7 @@
     <script>
         let isEditing = false;
         let pageHistory = ['notification-view'];
+        let currentSkillCategory = 'all';
         
         let typewriterTimerList = null;
         let fullQuestHeader = '';
@@ -563,8 +691,28 @@
         let typewriterTimerTodo = null;
         let fullTodoDetail = '';
 
-        window.onload = function() { loadSavedData(); };
+        window.onload = function() { 
+            loadSavedData();
+            updateBars();
+        };
 
+        /* --- การจัดการการอัปเดตความยาวหลอดค่าพลัง (HP, MP, STA, EXP) --- */
+        function updateBars() {
+            function calculatePercent(curId, maxId) {
+                let cur = parseFloat(document.getElementById(curId)?.textContent) || 0;
+                let max = parseFloat(document.getElementById(maxId)?.textContent) || 100;
+                if (max <= 0) max = 1;
+                let pct = (cur / max) * 100;
+                return Math.min(Math.max(pct, 0), 100);
+            }
+
+            document.getElementById('bar-hp').style.width = calculatePercent('hp-cur', 'hp-max') + '%';
+            document.getElementById('bar-mp').style.width = calculatePercent('mp-cur', 'mp-max') + '%';
+            document.getElementById('bar-sta').style.width = calculatePercent('sta-cur', 'sta-max') + '%';
+            document.getElementById('bar-exp').style.width = calculatePercent('exp-cur', 'exp-max') + '%';
+        }
+
+        /* --- การสลับหน้า Navigation --- */
         function switchTab(tab) {
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
@@ -599,9 +747,109 @@
                 pageHistory.push(pageId);
             }
             updateBackButton();
+
+            if (pageId === 'quest-detail-view') startDetailTypewriter();
+            if (pageId === 'quest-list-view') startQuestListTypewriter();
+            if (pageId === 'todo-list-view') startTodoTypewriter();
         }
 
-        /* --- Typewriter Effects (รักษาระยะช่องว่าง Spacebar/เว้นบรรทัด) --- */
+        function goBackPage() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop();
+                let prevPage = pageHistory[pageHistory.length - 1];
+                const views = ['notification-view', 'quest-detail-view', 'quest-list-view', 'todo-list-view', 'status-view', 'skill-view', 'item-view', 'inventory-view'];
+                views.forEach(v => document.getElementById(v).style.display = 'none');
+                document.getElementById(prevPage).style.display = 'block';
+                updateBackButton();
+            }
+        }
+
+        function updateBackButton() {
+            const backBtn = document.getElementById('back-btn');
+            if (pageHistory.length > 1) {
+                backBtn.style.display = 'inline-flex';
+            } else {
+                backBtn.style.display = 'none';
+            }
+        }
+
+        /* --- โหมดแก้ไขข้อความ (Edit Mode) --- */
+        function toggleEditMode() {
+            isEditing = !isEditing;
+            const container = document.getElementById('app-container');
+            const editBtn = document.getElementById('edit-btn');
+
+            if (isEditing) {
+                container.classList.add('editing-active');
+                editBtn.classList.add('active');
+                editBtn.innerHTML = '💾 บันทึก';
+
+                document.querySelectorAll('.editable').forEach(el => {
+                    el.contentEditable = 'true';
+                });
+                document.querySelectorAll('.delete-btn, .add-btn').forEach(el => {
+                    el.style.display = 'inline-block';
+                });
+            } else {
+                container.classList.remove('editing-active');
+                editBtn.classList.remove('active');
+                editBtn.innerHTML = '✏️ แก้ไข';
+
+                document.querySelectorAll('.editable').forEach(el => {
+                    el.contentEditable = 'false';
+                });
+                document.querySelectorAll('.delete-btn, .add-btn').forEach(el => {
+                    el.style.display = 'none';
+                });
+
+                fullDetailTitle = ''; fullDetailName = ''; fullDetailDesc = '';
+                fullQuestHeader = ''; fullQuestTitle = '';
+                fullTodoDetail = '';
+
+                saveData();
+            }
+        }
+
+        /* --- ระบบกรองประเภทสกิล (Skill Category Filter) --- */
+        function filterSkills(category, btnElement) {
+            currentSkillCategory = category;
+            
+            // สลับสถานะปุ่ม Active
+            document.querySelectorAll('.skill-tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+
+            // ซ่อน/แสดง สกิลตามประเภท
+            const skills = document.querySelectorAll('#skill-list .skill-item');
+            skills.forEach(skill => {
+                const type = skill.getAttribute('data-type');
+                if (category === 'all' || type === category) {
+                    skill.style.display = 'flex';
+                } else {
+                    skill.style.display = 'none';
+                }
+            });
+        }
+
+        function changeSkillType(selectEl) {
+            const skillItem = selectEl.closest('.skill-item');
+            const newType = selectEl.value;
+            const tagEl = skillItem.querySelector('.skill-type-tag');
+
+            skillItem.setAttribute('data-type', newType);
+
+            if (newType === 'active') {
+                tagEl.className = 'skill-type-tag active-type';
+                tagEl.textContent = '⚔️ โจมตี';
+            } else {
+                tagEl.className = 'skill-type-tag passive-type';
+                tagEl.textContent = '🛡️ ติดตัว';
+            }
+
+            // กรองการแสดงผลทันทีหลังเปลี่ยน
+            filterSkills(currentSkillCategory, document.querySelector('.skill-tab-btn.active'));
+        }
+
+        /* --- Typewriter Effects --- */
         function startDetailTypewriter() {
             if (isEditing) return;
 
@@ -626,7 +874,7 @@
                     else if (j < fullDetailName.length) { nameEl.textContent += fullDetailName.charAt(j); j++; }
                     else if (k < fullDetailDesc.length) { descEl.textContent += fullDetailDesc.charAt(k); k++; }
                     else { clearInterval(typewriterTimerDetail); }
-                }, 30);
+                }, 25);
             }
         }
 
@@ -664,12 +912,14 @@
                     if (i < fullQuestHeader.length) { headerEl.textContent += fullQuestHeader.charAt(i); i++; }
                     else if (j < fullQuestTitle.length) { questTitleEl.textContent += fullQuestTitle.charAt(j); j++; }
                     else { clearInterval(typewriterTimerList); }
-                }, 40);
+                }, 25);
             }
         }
 
-        function skipQuestListTypewriter() {
+        function skipQuestListTypewriter(e) {
             if (isEditing) return;
+            if (e && (e.target.tagName === 'BUTTON' || e.target.classList.contains('editable'))) return;
+
             clearInterval(typewriterTimerList);
             const headerEl = document.getElementById('text-quest-list-header');
             const questTitleEl = document.getElementById('first-quest-title');
@@ -681,261 +931,195 @@
         function startTodoTypewriter() {
             if (isEditing) return;
 
-            const todoDetailEl = document.getElementById('text-todo-detail');
-            if (todoDetailEl) {
-                if (!fullTodoDetail) fullTodoDetail = todoDetailEl.textContent;
-                todoDetailEl.textContent = '';
+            const detailEl = document.getElementById('text-todo-detail');
+            if (detailEl) {
+                if (!fullTodoDetail) fullTodoDetail = detailEl.textContent;
+                detailEl.textContent = '';
 
                 let i = 0;
                 clearInterval(typewriterTimerTodo);
 
                 typewriterTimerTodo = setInterval(() => {
-                    if (i < fullTodoDetail.length) {
-                        todoDetailEl.textContent += fullTodoDetail.charAt(i);
-                        i++;
-                    } else {
-                        clearInterval(typewriterTimerTodo);
-                    }
-                }, 25);
+                    if (i < fullTodoDetail.length) { detailEl.textContent += fullTodoDetail.charAt(i); i++; }
+                    else { clearInterval(typewriterTimerTodo); }
+                }, 20);
             }
         }
 
         function skipTodoTypewriter(e) {
             if (isEditing) return;
-            if (e && (e.target.tagName === 'BUTTON' || e.target.classList.contains('editable') || e.target.closest('.quest-item'))) return;
+            if (e && (e.target.tagName === 'BUTTON' || e.target.classList.contains('editable'))) return;
 
             clearInterval(typewriterTimerTodo);
-            const todoDetailEl = document.getElementById('text-todo-detail');
-            if (todoDetailEl && fullTodoDetail) todoDetailEl.textContent = fullTodoDetail;
+            const detailEl = document.getElementById('text-todo-detail');
+            if (detailEl && fullTodoDetail) detailEl.textContent = fullTodoDetail;
         }
 
-        function openTodoListView() {
-            navigateTo('todo-list-view');
-            startTodoTypewriter();
+        /* --- Handlers การคลิกเมนูและปุ่มต่างๆ --- */
+        function handleBoxClick(e, actionCallback) {
+            if (isEditing) return;
+            if (e.target.tagName === 'BUTTON' || e.target.classList.contains('editable')) return;
+            actionCallback();
         }
 
-        function showQuestDetail() { 
-            navigateTo('quest-detail-view'); 
-            startDetailTypewriter();
+        function showQuestDetail() { navigateTo('quest-detail-view'); }
+        function openTodoListView() { navigateTo('todo-list-view'); }
+
+        function acceptQuest() {
+            alert("👍 ยอมรับภารกิจแล้ว! ตรวจสอบรายการได้ที่แท็บ Active");
+            switchTab('quest-list');
         }
 
-        function acceptQuest() { 
-            switchTab('quest-list'); 
-            startQuestListTypewriter();
-        }
-
-        function declineQuest() { navigateTo('notification-view'); }
-
-        function goBackPage() {
-            if (pageHistory.length > 1) {
-                pageHistory.pop();
-                const previousPage = pageHistory[pageHistory.length - 1];
-                
-                const views = ['notification-view', 'quest-detail-view', 'quest-list-view', 'todo-list-view', 'status-view', 'skill-view', 'item-view', 'inventory-view'];
-                views.forEach(v => document.getElementById(v).style.display = 'none');
-                document.getElementById(previousPage).style.display = 'block';
-
-                updateBackButton();
-            }
-        }
-
-        function updateBackButton() {
-            const backBtn = document.getElementById('back-btn');
-            backBtn.style.display = pageHistory.length > 1 ? 'inline-flex' : 'none';
+        function declineQuest() {
+            alert("❌ ยกเลิก/ปฏิเสธภารกิจเรียบร้อย");
+            switchTab('new-quest');
         }
 
         function claimItem() {
-            const itemIcon = document.getElementById('text-item-icon').textContent;
-            const itemName = document.getElementById('text-item-name').textContent;
-
-            const invList = document.getElementById('inventory-list');
-            const div = document.createElement('div');
-            div.className = 'inv-card';
-            div.innerHTML = `
-                <div class="inv-icon-grid editable" ${isEditing ? 'contenteditable="true"' : ''}>${itemIcon}</div>
-                <div class="inv-title-grid editable" ${isEditing ? 'contenteditable="true"' : ''}>${itemName}</div>
-                <div class="inv-actions">
-                    <button class="use-item-btn" onclick="alert('ใช้งาน / สวมใส่ ${itemName}')">ใช้</button>
-                    <button class="delete-btn" style="${isEditing ? 'display:inline-block' : 'display:none'}" onclick="deleteItem(this)">🗑️</button>
-                </div>
-            `;
-            invList.appendChild(div);
-            saveData();
-
-            alert(`🎉 รับ "${itemName}" เข้าสู่ช่องเก็บของเรียบร้อยแล้ว!`);
+            alert("🎁 รับไอเทมเรียบร้อย! ไอเทมถูกเพิ่มลงในกระเป๋าแล้ว");
             switchTab('inventory');
         }
 
-        function upgradeSkill(btn) {
-            const lvlSpan = btn.closest('.skill-item').querySelector('.lvl-num');
-            let currentLvl = parseInt(lvlSpan.textContent) || 1;
-            lvlSpan.textContent = currentLvl + 1;
-            saveData();
+        function handleTaskClick(e, element) {
+            if (isEditing) return;
+            if (e.target.classList.contains('delete-btn') || e.target.classList.contains('editable')) return;
+            element.classList.toggle('completed');
         }
 
-        function toggleEditMode() {
-            isEditing = !isEditing;
-            const btn = document.getElementById('edit-btn');
-            const app = document.getElementById('app-container');
-            
-            const addBtns = document.querySelectorAll('.add-btn');
-            const delBtns = document.querySelectorAll('.delete-btn');
-            const editables = document.querySelectorAll('.editable');
-
-            if (isEditing) {
-                skipQuestListTypewriter();
-                skipDetailTypewriter();
-                skipTodoTypewriter();
-                btn.innerText = "💾 บันทึก";
-                btn.classList.add('active');
-                app.classList.add('editing-active');
-                
-                addBtns.forEach(b => b.style.display = 'block');
-                delBtns.forEach(b => b.style.display = 'inline-block');
-                editables.forEach(el => el.contentEditable = "true");
-            } else {
-                btn.innerText = "✏️ แก้ไข";
-                btn.classList.remove('active');
-                app.classList.remove('editing-active');
-
-                addBtns.forEach(b => b.style.display = 'none');
-                delBtns.forEach(b => b.style.display = 'none');
-                editables.forEach(el => el.contentEditable = "false");
-
-                // บันทึกข้อความโดยใช้ textContent รักษาสเปซ
-                const headerEl = document.getElementById('text-quest-list-header');
-                const questTitleEl = document.getElementById('first-quest-title');
-                if (headerEl) fullQuestHeader = headerEl.textContent;
-                if (questTitleEl) fullQuestTitle = questTitleEl.textContent;
-
-                const titleEl = document.getElementById('text-quest-title');
-                const nameEl = document.getElementById('text-quest-name');
-                const descEl = document.getElementById('text-quest-desc');
-                if (titleEl) fullDetailTitle = titleEl.textContent;
-                if (nameEl) fullDetailName = nameEl.textContent;
-                if (descEl) fullDetailDesc = descEl.textContent;
-
-                const todoDetailEl = document.getElementById('text-todo-detail');
-                if (todoDetailEl) fullTodoDetail = todoDetailEl.textContent;
-
-                saveData();
-                alert("บันทึกการแก้ไขเรียบร้อยแล้ว!");
+        function upgradeSkill(btn) {
+            if (isEditing) return;
+            let lvlSpan = btn.parentElement.parentElement.querySelector('.lvl-num');
+            if (lvlSpan) {
+                let currentLvl = parseInt(lvlSpan.textContent) || 1;
+                lvlSpan.textContent = currentLvl + 1;
             }
         }
 
-        function handleBoxClick(event, callback) { if (!isEditing) callback(); }
-        function handleTaskClick(event, element) { if (!isEditing) element.classList.toggle('completed'); }
-
         function deleteItem(btn) {
-            const parent = btn.closest('.status-row, .skill-item, .active-quest-card, .inv-card');
-            if (parent) parent.remove();
+            let item = btn.closest('.reward-item, .active-quest-card, .quest-item, .status-row, .skill-item, .inv-card');
+            if (item) item.remove();
         }
 
-        function addNewInventoryItem() {
-            const list = document.getElementById('inventory-list');
-            const div = document.createElement('div');
-            div.className = 'inv-card';
-            div.innerHTML = `
-                <div class="inv-icon-grid editable" contenteditable="true">💎</div>
-                <div class="inv-title-grid editable" contenteditable="true">อัญมณี</div>
-                <div class="inv-actions">
-                    <button class="use-item-btn" onclick="alert('ใช้งานไอเทม!')">ใช้</button>
-                    <button class="delete-btn" style="display:inline-block" onclick="deleteItem(this)">🗑️</button>
-                </div>
-            `;
-            list.appendChild(div);
+        /* --- ฟังก์ชันเพิ่ม Element ใหม่ --- */
+        function addNewReward() {
+            const ul = document.getElementById('reward-list');
+            const li = document.createElement('li');
+            li.className = 'reward-item';
+            li.innerHTML = `• <span class="editable" contenteditable="true">รางวัลใหม่ x1</span> <button class="delete-btn" style="display:inline-block;" onclick="deleteItem(this)">🗑️</button>`;
+            ul.appendChild(li);
         }
 
         function addNewQuestCard() {
             const container = document.getElementById('active-quests-container');
-            const div = document.createElement('div');
-            div.className = 'active-quest-card';
-            div.setAttribute('onclick', "handleBoxClick(event, openTodoListView)");
-            div.innerHTML = `<div class="quest-card-info"><span class="quest-card-title editable" contenteditable="true">⚔️ ภารกิจใหม่</span><span class="quest-card-status">⏳ กำลังดำเนินการ...</span></div><button class="delete-btn" style="display:inline-block" onclick="deleteItem(this); event.stopPropagation();">🗑️</button>`;
-            container.appendChild(div);
-        }
-
-        function addNewStatus() {
-            const list = document.getElementById('status-list');
-            const div = document.createElement('div');
-            div.className = 'status-row';
-            div.innerHTML = `<span class="status-name editable" contenteditable="true">✨ ค่าใหม่</span><div><span class="status-val editable" contenteditable="true">10</span><button class="delete-btn" style="display:inline-block" onclick="deleteItem(this)">🗑️</button></div>`;
-            list.appendChild(div);
-        }
-
-        function addNewSkill() {
-            const list = document.getElementById('skill-list');
-            const div = document.createElement('div');
-            div.className = 'skill-item';
-            div.innerHTML = `<div class="skill-info"><span class="skill-title editable" contenteditable="true">✨ สกิลใหม่</span><span class="skill-lvl">Lv. <span class="lvl-num editable" contenteditable="true">1</span></span></div><div style="display:flex; align-items:center; gap:6px;"><button class="lvl-up-btn" onclick="upgradeSkill(this)">+1 Up</button><button class="delete-btn" style="display:inline-block" onclick="deleteItem(this)">🗑️</button></div>`;
-            list.appendChild(div);
+            const card = document.createElement('div');
+            card.className = 'active-quest-card';
+            card.onclick = (e) => handleBoxClick(e, openTodoListView);
+            card.innerHTML = `
+                <div class="quest-card-info">
+                    <span class="quest-card-title editable" contenteditable="true">⚔️ ภารกิจใหม่</span>
+                    <span class="quest-card-status">⏳ กำลังดำเนินการ...</span>
+                </div>
+                <button class="delete-btn" style="display:inline-block;" onclick="deleteItem(this); event.stopPropagation();">🗑️</button>
+            `;
+            container.appendChild(card);
         }
 
         function addNewTask() {
-            const list = document.getElementById('quest-list');
+            const ul = document.getElementById('quest-list');
             const li = document.createElement('li');
             li.className = 'quest-item';
-            li.setAttribute('onclick', 'handleTaskClick(event, this)');
-            li.innerHTML = `<div class="pixel-checkbox"></div><span class="editable" contenteditable="true">ภารกิจใหม่</span>`;
-            list.appendChild(li);
+            li.onclick = (e) => handleTaskClick(e, li);
+            li.innerHTML = `
+                <div class="pixel-checkbox"></div>
+                <span class="editable" contenteditable="true">เป้าหมายภารกิจใหม่</span>
+                <button class="delete-btn" style="display:inline-block;" onclick="deleteItem(this); event.stopPropagation();">🗑️</button>
+            `;
+            ul.appendChild(li);
         }
 
-        function addNewReward() {
-            const list = document.getElementById('reward-list');
-            const li = document.createElement('li');
-            li.className = 'reward-item';
-            li.innerHTML = `• <span class="editable" contenteditable="true">ของรางวัลใหม่</span>`;
-            list.appendChild(li);
+        function addNewStatus() {
+            const container = document.getElementById('status-list');
+            const row = document.createElement('div');
+            row.className = 'status-row';
+            row.innerHTML = `
+                <span class="status-name editable" contenteditable="true">✨ Status ใหม่</span>
+                <div><span class="status-val editable" contenteditable="true">10</span><button class="delete-btn" style="display:inline-block;" onclick="deleteItem(this)">🗑️</button></div>
+            `;
+            container.appendChild(row);
         }
 
+        function addNewSkill() {
+            const container = document.getElementById('skill-list');
+            const item = document.createElement('div');
+            
+            // ถ้าเลือกอยู่แท็บพาสซีฟ ให้สร้างเป็นพาสซีฟโดยอัตโนมัติ
+            const defaultType = (currentSkillCategory === 'passive') ? 'passive' : 'active';
+            const tagClass = (defaultType === 'passive') ? 'passive-type' : 'active-type';
+            const tagText = (defaultType === 'passive') ? '🛡️ ติดตัว' : '⚔️ โจมตี';
+
+            item.className = 'skill-item';
+            item.setAttribute('data-type', defaultType);
+            item.innerHTML = `
+                <div class="skill-info">
+                    <span class="skill-title editable" contenteditable="true">✨ สกิลใหม่</span>
+                    <div class="skill-meta">
+                        <span class="skill-type-tag ${tagClass}">${tagText}</span>
+                        <select class="skill-type-select" style="display:${isEditing ? 'inline-block' : 'none'};" onchange="changeSkillType(this)">
+                            <option value="active" ${defaultType === 'active' ? 'selected' : ''}>⚔️ โจมตี</option>
+                            <option value="passive" ${defaultType === 'passive' ? 'selected' : ''}>🛡️ ติดตัว</option>
+                        </select>
+                        <span class="skill-lvl">Lv. <span class="lvl-num editable" contenteditable="true">1</span></span>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <button class="lvl-up-btn" onclick="upgradeSkill(this)">+1 Up</button>
+                    <button class="delete-btn" style="display:${isEditing ? 'inline-block' : 'none'};" onclick="deleteItem(this)">🗑️</button>
+                </div>
+            `;
+            container.appendChild(item);
+            filterSkills(currentSkillCategory, document.querySelector('.skill-tab-btn.active'));
+        }
+
+        function addNewInventoryItem() {
+            const container = document.getElementById('inventory-list');
+            const card = document.createElement('div');
+            card.className = 'inv-card';
+            card.innerHTML = `
+                <div class="inv-icon-grid editable" contenteditable="true">📦</div>
+                <div class="inv-title-grid editable" contenteditable="true">ไอเทมใหม่</div>
+                <div class="inv-actions">
+                    <button class="use-item-btn" onclick="alert('ใช้ไอเทม!')">ใช้</button>
+                    <button class="delete-btn" style="display:inline-block;" onclick="deleteItem(this)">🗑️</button>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        /* --- LocalStorage Save/Load System --- */
         function saveData() {
-            const data = {};
-            document.querySelectorAll('.editable').forEach(el => {
-                if (el.id) data[el.id] = el.innerHTML;
-            });
-            data['quest-list-html'] = document.getElementById('quest-list').innerHTML;
-            data['reward-list-html'] = document.getElementById('reward-list').innerHTML;
-            data['status-list-html'] = document.getElementById('status-list').innerHTML;
-            data['skill-list-html'] = document.getElementById('skill-list').innerHTML;
-            data['active-quests-html'] = document.getElementById('active-quests-container').innerHTML;
-            data['inventory-list-html'] = document.getElementById('inventory-list').innerHTML;
-            localStorage.setItem('rpg_quest_data', JSON.stringify(data));
+            const dataToSave = {
+                appHTML: document.getElementById('app-container').innerHTML
+            };
+            localStorage.setItem('rpg_quest_save_data', JSON.stringify(dataToSave));
         }
 
         function loadSavedData() {
-            const saved = localStorage.getItem('rpg_quest_data');
+            const saved = localStorage.getItem('rpg_quest_save_data');
             if (saved) {
-                const data = JSON.parse(saved);
-                for (let id in data) {
-                    if (id === 'quest-list-html') document.getElementById('quest-list').innerHTML = data[id];
-                    else if (id === 'reward-list-html') document.getElementById('reward-list').innerHTML = data[id];
-                    else if (id === 'status-list-html') document.getElementById('status-list').innerHTML = data[id];
-                    else if (id === 'skill-list-html') document.getElementById('skill-list').innerHTML = data[id];
-                    else if (id === 'active-quests-html') document.getElementById('active-quests-container').innerHTML = data[id];
-                    else if (id === 'inventory-list-html') document.getElementById('inventory-list').innerHTML = data[id];
-                    else {
-                        const el = document.getElementById(id);
-                        if (el) el.innerHTML = data[id];
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.appHTML) {
+                        document.getElementById('app-container').innerHTML = parsed.appHTML;
+                        document.querySelectorAll('.editable').forEach(el => el.contentEditable = 'false');
+                        document.querySelectorAll('.delete-btn, .add-btn').forEach(el => el.style.display = 'none');
                     }
+                } catch(e) {
+                    console.error("Failed to load saved data", e);
                 }
             }
-
-            const headerEl = document.getElementById('text-quest-list-header');
-            const questTitleEl = document.getElementById('first-quest-title');
-            if (headerEl) fullQuestHeader = headerEl.textContent;
-            if (questTitleEl) fullQuestTitle = questTitleEl.textContent;
-
-            const titleEl = document.getElementById('text-quest-title');
-            const nameEl = document.getElementById('text-quest-name');
-            const descEl = document.getElementById('text-quest-desc');
-            if (titleEl) fullDetailTitle = titleEl.textContent;
-            if (nameEl) fullDetailName = nameEl.textContent;
-            if (descEl) fullDetailDesc = descEl.textContent;
-
-            const todoDetailEl = document.getElementById('text-todo-detail');
-            if (todoDetailEl) fullTodoDetail = todoDetailEl.textContent;
         }
     </script>
-
 </body>
 </html>
+
+```
