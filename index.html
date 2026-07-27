@@ -146,6 +146,32 @@
             animation: blink 1s infinite;
         }
 
+        /* ปุ่ม Back Page (ย้อนกลับ) */
+        .back-page-btn {
+            position: absolute;
+            bottom: 50px;
+            left: 12px;
+            z-index: 20;
+            background: #37474f;
+            color: #fff;
+            border: 2px solid #000;
+            font-family: 'Prompt', sans-serif;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            box-shadow: 2px 2px 0 #000;
+            cursor: pointer;
+            display: none; /* จะแสดงเมื่อไม่ได้อยู่ในหน้าแรก */
+            align-items: center;
+            gap: 4px;
+        }
+
+        .back-page-btn:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0 #000;
+        }
+
         .viewport {
             position: relative;
             z-index: 5;
@@ -415,6 +441,9 @@
         <!-- ปุ่มสำหรับสลับโหมดแก้ไขข้อความ -->
         <button class="edit-toggle-btn" id="edit-btn" onclick="toggleEditMode()">✏️ โหมดแก้ไข</button>
 
+        <!-- ปุ่ม Back Page (ย้อนกลับ) -->
+        <button class="back-page-btn" id="back-btn" onclick="goBackPage()">↩️ Back</button>
+
         <div class="top-hud">
             <div class="hero-stats">
                 <div class="stat-bar">
@@ -497,11 +526,59 @@
 
     <script>
         let isEditing = false;
+        let pageHistory = ['notification-view']; // ระบบเก็บประวัติการเปลี่ยนหน้า
 
-        // โหลดข้อมูลที่เคยบันทึกไว้เมื่อเปิดหน้าจอขึ้นมา
         window.onload = function() {
             loadSavedData();
         };
+
+        // ฟังก์ชันเปลี่ยนหน้าและเก็บประวัติ
+        function navigateTo(pageId) {
+            const views = ['notification-view', 'quest-detail-view', 'todo-list-view'];
+            views.forEach(v => document.getElementById(v).style.display = 'none');
+            
+            document.getElementById(pageId).style.display = 'block';
+            
+            if (pageHistory[pageHistory.length - 1] !== pageId) {
+                pageHistory.push(pageId);
+            }
+            updateBackButton();
+        }
+
+        // ฟังก์ชันถอยหลัง (Back Page)
+        function goBackPage() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop(); // เอาหน้าปัจจุบันออก
+                const previousPage = pageHistory[pageHistory.length - 1];
+                
+                const views = ['notification-view', 'quest-detail-view', 'todo-list-view'];
+                views.forEach(v => document.getElementById(v).style.display = 'none');
+                document.getElementById(previousPage).style.display = 'block';
+
+                updateBackButton();
+            }
+        }
+
+        function updateBackButton() {
+            const backBtn = document.getElementById('back-btn');
+            if (pageHistory.length > 1) {
+                backBtn.style.display = 'flex';
+            } else {
+                backBtn.style.display = 'none';
+            }
+        }
+
+        function showQuestDetail() {
+            navigateTo('quest-detail-view');
+        }
+
+        function declineQuest() {
+            navigateTo('notification-view');
+        }
+
+        function acceptQuest() {
+            navigateTo('todo-list-view');
+        }
 
         function toggleEditMode() {
             isEditing = !isEditing;
@@ -516,49 +593,25 @@
                 app.classList.add('editing-active');
                 addTaskBtn.style.display = 'block';
 
-                editables.forEach(el => {
-                    el.contentEditable = "true";
-                });
+                editables.forEach(el => el.contentEditable = "true");
             } else {
                 btn.innerText = "✏️ โหมดแก้ไข";
                 btn.classList.remove('active');
                 app.classList.remove('editing-active');
                 addTaskBtn.style.display = 'none';
 
-                editables.forEach(el => {
-                    el.contentEditable = "false";
-                });
-
+                editables.forEach(el => el.contentEditable = "false");
                 saveData();
                 alert("บันทึกการแก้ไขเรียบร้อยแล้ว!");
             }
         }
 
         function handleBoxClick(event, callback) {
-            if (!isEditing) {
-                callback();
-            }
+            if (!isEditing) callback();
         }
 
         function handleTaskClick(event, element) {
-            if (!isEditing) {
-                element.classList.toggle('completed');
-            }
-        }
-
-        function showQuestDetail() {
-            document.getElementById('notification-view').style.display = 'none';
-            document.getElementById('quest-detail-view').style.display = 'block';
-        }
-
-        function declineQuest() {
-            document.getElementById('quest-detail-view').style.display = 'none';
-            document.getElementById('notification-view').style.display = 'block';
-        }
-
-        function acceptQuest() {
-            document.getElementById('quest-detail-view').style.display = 'none';
-            document.getElementById('todo-list-view').style.display = 'block';
+            if (!isEditing) element.classList.toggle('completed');
         }
 
         function addNewTask() {
@@ -570,20 +623,15 @@
             list.appendChild(li);
         }
 
-        // บันทึกลงในความจำมือถือ (LocalStorage)
         function saveData() {
             const data = {};
             document.querySelectorAll('.editable').forEach(el => {
-                if (el.id) {
-                    data[el.id] = el.innerHTML;
-                }
+                if (el.id) data[el.id] = el.innerHTML;
             });
-            // บันทึกรายการภารกิจทั้งหมด
             data['quest-list-html'] = document.getElementById('quest-list').innerHTML;
             localStorage.setItem('rpg_quest_data', JSON.stringify(data));
         }
 
-        // ดึงข้อมูลที่บันทึกไว้มาแสดงผล
         function loadSavedData() {
             const saved = localStorage.getItem('rpg_quest_data');
             if (saved) {
