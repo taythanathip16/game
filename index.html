@@ -69,7 +69,7 @@
             z-index: 1;
         }
 
-        /* --- TOP HUD & SYSTEM BUTTONS --- */
+        /* TOP HUD */
         .top-hud {
             position: relative; z-index: 20; background: #1b1328;
             border-bottom: 3px solid #f2a63b; padding: 8px 10px;
@@ -77,9 +77,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.6); gap: 6px;
         }
 
-        .top-left-controls {
-            display: flex; align-items: center; gap: 6px;
-        }
+        .top-left-controls { display: flex; align-items: center; gap: 6px; }
 
         .edit-toggle-btn {
             background: #7b1fa2; color: #fff; border: 2px solid #000;
@@ -97,9 +95,7 @@
             cursor: pointer; display: none; align-items: center; white-space: nowrap;
         }
 
-        .top-right-stats {
-            display: flex; align-items: center; gap: 8px;
-        }
+        .top-right-stats { display: flex; align-items: center; gap: 8px; }
 
         .hero-stats { display: flex; flex-direction: column; gap: 2px; }
 
@@ -316,7 +312,7 @@
         
         <div class="game-bg"></div>
 
-        <!-- TOP HUD + CONTROL BUTTONS -->
+        <!-- TOP HUD -->
         <div class="top-hud">
             <div class="top-left-controls">
                 <button class="back-page-btn" id="back-btn" onclick="goBackPage()">↩️ Back</button>
@@ -352,8 +348,8 @@
                 <p class="pixel-sub editable" id="text-notif-sub">(แตะที่ซองจดหมายเพื่อเปิดอ่าน)</p>
             </div>
 
-            <!-- VIEW 2: รายละเอียดภารกิจ (มี Typewriter Effect) -->
-            <div id="quest-detail-view" class="pixel-box" onclick="skipTypewriter()">
+            <!-- VIEW 2: รายละเอียดภารกิจ -->
+            <div id="quest-detail-view" class="pixel-box">
                 <div class="parchment-title editable" id="text-quest-title">-- QUEST DETAILS --</div>
                 <div class="quest-description">
                     <span class="editable" id="text-quest-name">ภารกิจ: ปกป้องหมู่บ้านพิกเซล</span><br>
@@ -373,13 +369,13 @@
                 </div>
             </div>
 
-            <!-- VIEW 3: รายการภารกิจที่กำลังดำเนินการ -->
-            <div id="quest-list-view" class="pixel-box">
+            <!-- VIEW 3: รายการภารกิจที่กำลังดำเนินการ (Typewriter Effect ทำงานที่นี่) -->
+            <div id="quest-list-view" class="pixel-box" onclick="skipQuestListTypewriter()">
                 <div class="todo-header editable" id="text-quest-list-header">ACTIVE QUESTS</div>
                 <div id="active-quests-container">
                     <div class="active-quest-card" onclick="handleBoxClick(event, () => navigateTo('todo-list-view'))">
                         <div class="quest-card-info">
-                            <span class="quest-card-title editable">⚔️ ปกป้องหมู่บ้านพิกเซล</span>
+                            <span class="quest-card-title editable" id="first-quest-title">⚔️ ปกป้องหมู่บ้านพิกเซล</span>
                             <span class="quest-card-status">⏳ กำลังดำเนินการ...</span>
                         </div>
                         <button class="delete-btn" onclick="deleteItem(this); event.stopPropagation();">🗑️</button>
@@ -465,8 +461,8 @@
         let isEditing = false;
         let pageHistory = ['notification-view'];
         let typewriterTimer = null;
-        let fullQuestDescText = '';
-        let fullQuestNameText = '';
+        let fullQuestHeader = '';
+        let fullQuestTitle = '';
 
         window.onload = function() { loadSavedData(); };
 
@@ -497,49 +493,61 @@
             
             document.getElementById(pageId).style.display = 'block';
 
-            if (pageId === 'quest-detail-view' && !isEditing) {
-                startTypewriterEffect();
-            }
-            
             if (pageHistory[pageHistory.length - 1] !== pageId) {
                 pageHistory.push(pageId);
             }
             updateBackButton();
         }
 
-        function startTypewriterEffect() {
-            const questNameEl = document.getElementById('text-quest-name');
-            const questDescEl = document.getElementById('text-quest-desc');
+        /* --- Typewriter Effect สำหรับหน้า รายการภารกิจ (Quests) --- */
+        function startQuestListTypewriter() {
+            if (isEditing) return;
 
-            if (!fullQuestNameText) fullQuestNameText = questNameEl.innerText;
-            if (!fullQuestDescText) fullQuestDescText = questDescEl.innerText;
+            const headerEl = document.getElementById('text-quest-list-header');
+            const questTitleEl = document.getElementById('first-quest-title');
 
-            questNameEl.innerText = '';
-            questDescEl.innerText = '';
+            if (headerEl && questTitleEl) {
+                if (!fullQuestHeader) fullQuestHeader = headerEl.innerText;
+                if (!fullQuestTitle) fullQuestTitle = questTitleEl.innerText;
 
-            let i = 0;
-            let j = 0;
-            clearInterval(typewriterTimer);
+                headerEl.innerText = '';
+                questTitleEl.innerText = '';
 
-            typewriterTimer = setInterval(() => {
-                if (i < fullQuestNameText.length) {
-                    questNameEl.innerText += fullQuestNameText.charAt(i);
-                    i++;
-                } else if (j < fullQuestDescText.length) {
-                    questDescEl.innerText += fullQuestDescText.charAt(j);
-                    j++;
-                } else {
-                    clearInterval(typewriterTimer);
-                }
-            }, 35);
+                let i = 0;
+                let j = 0;
+                clearInterval(typewriterTimer);
+
+                typewriterTimer = setInterval(() => {
+                    if (i < fullQuestHeader.length) {
+                        headerEl.innerText += fullQuestHeader.charAt(i);
+                        i++;
+                    } else if (j < fullQuestTitle.length) {
+                        questTitleEl.innerText += fullQuestTitle.charAt(j);
+                        j++;
+                    } else {
+                        clearInterval(typewriterTimer);
+                    }
+                }, 40);
+            }
         }
 
-        function skipTypewriter() {
+        function skipQuestListTypewriter() {
             if (isEditing) return;
             clearInterval(typewriterTimer);
-            if (fullQuestNameText) document.getElementById('text-quest-name').innerText = fullQuestNameText;
-            if (fullQuestDescText) document.getElementById('text-quest-desc').innerText = fullQuestDescText;
+            const headerEl = document.getElementById('text-quest-list-header');
+            const questTitleEl = document.getElementById('first-quest-title');
+
+            if (headerEl && fullQuestHeader) headerEl.innerText = fullQuestHeader;
+            if (questTitleEl && fullQuestTitle) questTitleEl.innerText = fullQuestTitle;
         }
+
+        function acceptQuest() { 
+            switchTab('quest-list'); 
+            startQuestListTypewriter();
+        }
+
+        function declineQuest() { navigateTo('notification-view'); }
+        function showQuestDetail() { navigateTo('quest-detail-view'); }
 
         function goBackPage() {
             if (pageHistory.length > 1) {
@@ -558,10 +566,6 @@
             const backBtn = document.getElementById('back-btn');
             backBtn.style.display = pageHistory.length > 1 ? 'inline-flex' : 'none';
         }
-
-        function showQuestDetail() { navigateTo('quest-detail-view'); }
-        function declineQuest() { navigateTo('notification-view'); }
-        function acceptQuest() { switchTab('quest-list'); }
 
         function claimItem() {
             alert("🎉 คุณได้รับไอเทมแล้ว! เก็บเข้าสู่คลังสัมภาระเรียบร้อย");
@@ -584,7 +588,7 @@
             const editables = document.querySelectorAll('.editable');
 
             if (isEditing) {
-                skipTypewriter();
+                skipQuestListTypewriter();
                 btn.innerText = "💾 บันทึก";
                 btn.classList.add('active');
                 app.classList.add('editing-active');
@@ -601,8 +605,10 @@
                 delBtns.forEach(b => b.style.display = 'none');
                 editables.forEach(el => el.contentEditable = "false");
 
-                fullQuestNameText = document.getElementById('text-quest-name').innerText;
-                fullQuestDescText = document.getElementById('text-quest-desc').innerText;
+                const headerEl = document.getElementById('text-quest-list-header');
+                const questTitleEl = document.getElementById('first-quest-title');
+                if (headerEl) fullQuestHeader = headerEl.innerText;
+                if (questTitleEl) fullQuestTitle = questTitleEl.innerText;
 
                 saveData();
                 alert("บันทึกการแก้ไขเรียบร้อยแล้ว!");
@@ -688,8 +694,10 @@
                     }
                 }
             }
-            fullQuestNameText = document.getElementById('text-quest-name').innerText;
-            fullQuestDescText = document.getElementById('text-quest-desc').innerText;
+            const headerEl = document.getElementById('text-quest-list-header');
+            const questTitleEl = document.getElementById('first-quest-title');
+            if (headerEl) fullQuestHeader = headerEl.innerText;
+            if (questTitleEl) fullQuestTitle = questTitleEl.innerText;
         }
     </script>
 
