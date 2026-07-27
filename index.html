@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Quest</title>
+    <title>RPG Quest Mobile - Retro 90s</title>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -24,14 +24,16 @@
             padding: 0;
         }
 
-        /* อนุญาตให้เลือกระบุข้อความได้เมื่ออยู่ในโหมดแก้ไข */
+        /* ไฮไลต์ส่วนที่แก้ไขได้เมื่อเปิดโหมดแก้ไข */
         .editing-active [contenteditable="true"] {
             user-select: text !important;
             -webkit-user-select: text !important;
             outline: 2px dashed #ffeb3b !important;
-            background: rgba(255, 235, 59, 0.15) !important;
+            background: rgba(255, 235, 59, 0.2) !important;
             padding: 2px 4px;
             border-radius: 4px;
+            display: inline-block;
+            min-width: 20px;
         }
 
         html, body {
@@ -146,7 +148,7 @@
             animation: blink 1s infinite;
         }
 
-        /* ปุ่ม Back Page (ย้อนกลับ) */
+        /* ปุ่ม Back Page */
         .back-page-btn {
             position: absolute;
             bottom: 50px;
@@ -162,7 +164,7 @@
             border-radius: 4px;
             box-shadow: 2px 2px 0 #000;
             cursor: pointer;
-            display: none; /* จะแสดงเมื่อไม่ได้อยู่ในหน้าแรก */
+            display: none;
             align-items: center;
             gap: 4px;
         }
@@ -305,7 +307,32 @@
         .reward-box strong {
             color: #5d3a1a;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+        }
+
+        .reward-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .reward-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .add-reward-btn {
+            background: #8c6b43;
+            color: #fff;
+            border: 1px solid #000;
+            font-size: 11px;
+            padding: 2px 8px;
+            margin-top: 8px;
+            cursor: pointer;
+            border-radius: 3px;
+            display: none;
         }
 
         .btn-stack {
@@ -438,10 +465,10 @@
         
         <div class="game-bg"></div>
 
-        <!-- ปุ่มสำหรับสลับโหมดแก้ไขข้อความ -->
+        <!-- ปุ่มโหมดแก้ไข -->
         <button class="edit-toggle-btn" id="edit-btn" onclick="toggleEditMode()">✏️ โหมดแก้ไข</button>
 
-        <!-- ปุ่ม Back Page (ย้อนกลับ) -->
+        <!-- ปุ่ม Back Page -->
         <button class="back-page-btn" id="back-btn" onclick="goBackPage()">↩️ Back</button>
 
         <div class="top-hud">
@@ -457,8 +484,9 @@
                     <span>40/50</span>
                 </div>
             </div>
+            <!-- แก้ไข Gold ได้ตรงนี้ -->
             <div class="gold-display">
-                🪙 <span id="text-gold" class="editable">500 G</span>
+                🪙 <span id="text-gold" class="editable">500</span> G
             </div>
         </div>
 
@@ -483,13 +511,17 @@
                     <span class="editable" id="text-quest-name"><strong>ภารกิจ: ปกป้องหมู่บ้านพิกเซล</strong></span><br>
                     <span class="editable" id="text-quest-desc">พวกสไลม์ป่ากำลังบุกรุกหมู่บ้านทาบาตะ! โปรดช่วยชาวบ้านกำจัดพวกมัน และค้นหาสมบัติที่หายไปในถ้ำทิศตะวันออก</span>
                 </div>
+                
+                <!-- กล่องรางวัลภารกิจ (แก้ไข & เพิ่มบรรทัดรางวัลได้) -->
                 <div class="reward-box">
                     <strong>🎁 รางวัลภารกิจ:</strong>
-                    <div class="editable" id="text-quest-reward">
-                        • 500 Gold<br>
-                        • ดาบไม้ผู้กล้า x1
-                    </div>
+                    <ul class="reward-list" id="reward-list">
+                        <li class="reward-item">• <span class="editable">500 Gold</span></li>
+                        <li class="reward-item">• <span class="editable">ดาบไม้ผู้กล้า x1</span></li>
+                    </ul>
+                    <button class="add-reward-btn" id="add-reward-btn" onclick="addNewReward()">➕ เพิ่มของรางวัล</button>
                 </div>
+
                 <div class="btn-stack">
                     <button class="rpg-btn btn-accept" onclick="acceptQuest()">ยอมรับภารกิจ</button>
                     <button class="rpg-btn btn-decline" onclick="declineQuest()">ยกเลิก / ปฏิเสธ</button>
@@ -526,13 +558,12 @@
 
     <script>
         let isEditing = false;
-        let pageHistory = ['notification-view']; // ระบบเก็บประวัติการเปลี่ยนหน้า
+        let pageHistory = ['notification-view'];
 
         window.onload = function() {
             loadSavedData();
         };
 
-        // ฟังก์ชันเปลี่ยนหน้าและเก็บประวัติ
         function navigateTo(pageId) {
             const views = ['notification-view', 'quest-detail-view', 'todo-list-view'];
             views.forEach(v => document.getElementById(v).style.display = 'none');
@@ -545,10 +576,9 @@
             updateBackButton();
         }
 
-        // ฟังก์ชันถอยหลัง (Back Page)
         function goBackPage() {
             if (pageHistory.length > 1) {
-                pageHistory.pop(); // เอาหน้าปัจจุบันออก
+                pageHistory.pop();
                 const previousPage = pageHistory[pageHistory.length - 1];
                 
                 const views = ['notification-view', 'quest-detail-view', 'todo-list-view'];
@@ -568,23 +598,16 @@
             }
         }
 
-        function showQuestDetail() {
-            navigateTo('quest-detail-view');
-        }
-
-        function declineQuest() {
-            navigateTo('notification-view');
-        }
-
-        function acceptQuest() {
-            navigateTo('todo-list-view');
-        }
+        function showQuestDetail() { navigateTo('quest-detail-view'); }
+        function declineQuest() { navigateTo('notification-view'); }
+        function acceptQuest() { navigateTo('todo-list-view'); }
 
         function toggleEditMode() {
             isEditing = !isEditing;
             const btn = document.getElementById('edit-btn');
             const app = document.getElementById('app-container');
             const addTaskBtn = document.getElementById('add-task-btn');
+            const addRewardBtn = document.getElementById('add-reward-btn');
             const editables = document.querySelectorAll('.editable');
 
             if (isEditing) {
@@ -592,6 +615,7 @@
                 btn.classList.add('active');
                 app.classList.add('editing-active');
                 addTaskBtn.style.display = 'block';
+                addRewardBtn.style.display = 'inline-block';
 
                 editables.forEach(el => el.contentEditable = "true");
             } else {
@@ -599,6 +623,7 @@
                 btn.classList.remove('active');
                 app.classList.remove('editing-active');
                 addTaskBtn.style.display = 'none';
+                addRewardBtn.style.display = 'none';
 
                 editables.forEach(el => el.contentEditable = "false");
                 saveData();
@@ -623,12 +648,21 @@
             list.appendChild(li);
         }
 
+        function addNewReward() {
+            const list = document.getElementById('reward-list');
+            const li = document.createElement('li');
+            li.className = 'reward-item';
+            li.innerHTML = `• <span class="editable" contenteditable="true">ของรางวัลใหม่</span>`;
+            list.appendChild(li);
+        }
+
         function saveData() {
             const data = {};
             document.querySelectorAll('.editable').forEach(el => {
                 if (el.id) data[el.id] = el.innerHTML;
             });
             data['quest-list-html'] = document.getElementById('quest-list').innerHTML;
+            data['reward-list-html'] = document.getElementById('reward-list').innerHTML;
             localStorage.setItem('rpg_quest_data', JSON.stringify(data));
         }
 
@@ -639,6 +673,8 @@
                 for (let id in data) {
                     if (id === 'quest-list-html') {
                         document.getElementById('quest-list').innerHTML = data[id];
+                    } else if (id === 'reward-list-html') {
+                        document.getElementById('reward-list').innerHTML = data[id];
                     } else {
                         const el = document.getElementById(id);
                         if (el) el.innerHTML = data[id];
