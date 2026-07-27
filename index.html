@@ -61,10 +61,7 @@
 
         .game-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: 
                 linear-gradient(rgba(18, 25, 16, 0.7), rgba(18, 25, 16, 0.7)),
                 repeating-linear-gradient(0deg, #2f422b 0px, #2f422b 16px, #253622 16px, #253622 32px),
@@ -73,205 +70,100 @@
         }
 
         .top-hud {
-            position: relative;
-            z-index: 10;
-            background: #1b1328;
-            border-bottom: 4px solid #f2a63b;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: relative; z-index: 10; background: #1b1328;
+            border-bottom: 4px solid #f2a63b; padding: 12px 16px;
+            display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
         }
 
-        .hero-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .hero-stats { display: flex; flex-direction: column; gap: 4px; }
 
-        .stat-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: bold;
-        }
+        .stat-bar { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: bold; }
 
         .bar-bg {
-            width: 80px;
-            height: 10px;
-            background: #000;
-            border: 1px solid #777;
-            border-radius: 2px;
-            overflow: hidden;
-            position: relative;
+            width: 80px; height: 10px; background: #000;
+            border: 1px solid #777; border-radius: 2px; overflow: hidden; position: relative;
         }
 
         .bar-fill-hp { width: 100%; height: 100%; background: #e53935; }
         .bar-fill-mp { width: 80%; height: 100%; background: #1e88e5; }
 
         .gold-display {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
-            color: #ffd700;
-            background: #0a0710;
-            padding: 6px 10px;
-            border: 2px solid #b8860b;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-family: 'Press Start 2P', cursive; font-size: 10px; color: #ffd700;
+            background: #0a0710; padding: 6px 10px; border: 2px solid #b8860b;
+            border-radius: 4px; display: flex; align-items: center; gap: 6px;
         }
 
-        /* เมนูด้านล่างสุดสำหรับกดสลับหน้า */
         .nav-bar {
-            position: relative;
-            z-index: 15;
-            background: #140d21;
-            border-top: 3px solid #f2a63b;
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 4px;
+            position: relative; z-index: 15; background: #140d21;
+            border-top: 3px solid #f2a63b; display: flex; justify-content: space-around; padding: 8px 4px;
         }
 
         .nav-btn {
-            background: #2a1f40;
-            color: #ffeb3b;
-            border: 2px solid #513e73;
-            font-family: 'Prompt', sans-serif;
-            font-weight: bold;
-            font-size: 12px;
-            padding: 6px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            flex: 1;
-            margin: 0 4px;
-            text-align: center;
-            box-shadow: 2px 2px 0 #000;
+            background: #2a1f40; color: #ffeb3b; border: 2px solid #513e73;
+            font-family: 'Prompt', sans-serif; font-weight: bold; font-size: 10px;
+            padding: 6px 2px; border-radius: 4px; cursor: pointer; flex: 1; margin: 0 2px;
+            text-align: center; box-shadow: 2px 2px 0 #000;
         }
 
-        .nav-btn:active, .nav-btn.active {
-            background: #f2a63b;
-            color: #000;
-            border-color: #fff;
-        }
+        .nav-btn:active, .nav-btn.active { background: #f2a63b; color: #000; border-color: #fff; }
 
         .edit-toggle-btn {
-            position: absolute;
-            top: 70px;
-            left: 12px;
-            z-index: 20;
-            background: #7b1fa2;
-            color: #fff;
-            border: 2px solid #000;
-            font-family: 'Prompt', sans-serif;
-            font-weight: bold;
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 4px;
-            box-shadow: 2px 2px 0 #000;
-            cursor: pointer;
+            position: absolute; top: 70px; left: 12px; z-index: 20;
+            background: #7b1fa2; color: #fff; border: 2px solid #000;
+            font-family: 'Prompt', sans-serif; font-weight: bold; font-size: 11px;
+            padding: 4px 10px; border-radius: 4px; box-shadow: 2px 2px 0 #000; cursor: pointer;
         }
 
-        .edit-toggle-btn.active {
-            background: #e65100;
-            animation: blink 1s infinite;
-        }
+        .edit-toggle-btn.active { background: #e65100; animation: blink 1s infinite; }
 
         .back-page-btn {
-            position: absolute;
-            bottom: 60px;
-            left: 12px;
-            z-index: 20;
-            background: #37474f;
-            color: #fff;
-            border: 2px solid #000;
-            font-family: 'Prompt', sans-serif;
-            font-weight: bold;
-            font-size: 11px;
-            padding: 6px 12px;
-            border-radius: 4px;
-            box-shadow: 2px 2px 0 #000;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            gap: 4px;
+            position: absolute; bottom: 60px; left: 12px; z-index: 20;
+            background: #37474f; color: #fff; border: 2px solid #000;
+            font-family: 'Prompt', sans-serif; font-weight: bold; font-size: 11px;
+            padding: 6px 12px; border-radius: 4px; box-shadow: 2px 2px 0 #000;
+            cursor: pointer; display: none; align-items: center; gap: 4px;
         }
 
         .viewport {
-            position: relative;
-            z-index: 5;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            overflow-y: auto;
+            position: relative; z-index: 5; flex: 1; display: flex;
+            justify-content: center; align-items: center; padding: 15px; overflow-y: auto;
         }
 
         .pixel-box {
-            background: #231b34;
-            border: 4px solid #f2a63b;
-            outline: 4px solid #100b1a;
+            background: #231b34; border: 4px solid #f2a63b; outline: 4px solid #100b1a;
             box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8), 4px 4px 0px #000;
-            border-radius: 4px;
-            width: 100%;
-            max-width: 400px;
-            position: relative;
-            max-height: 100%;
-            overflow-y: auto;
+            border-radius: 4px; width: 100%; max-width: 400px; position: relative;
+            max-height: 100%; overflow-y: auto;
         }
 
         #notification-view {
-            text-align: center;
-            cursor: pointer;
-            padding: 30px 20px;
+            text-align: center; cursor: pointer; padding: 30px 20px;
             animation: float 2.5s ease-in-out infinite;
         }
 
-        .envelope-wrapper {
-            position: relative;
-            width: 100px;
-            height: 70px;
-            margin: 0 auto 20px auto;
-        }
-
+        .envelope-wrapper { position: relative; width: 100px; height: 70px; margin: 0 auto 20px auto; }
         .envelope-body {
-            width: 100%;
-            height: 100%;
-            background: #e6be75;
-            border: 4px solid #4a2e15;
-            position: relative;
-            box-shadow: 4px 4px 0px #000;
+            width: 100%; height: 100%; background: #e6be75; border: 4px solid #4a2e15;
+            position: relative; box-shadow: 4px 4px 0px #000;
         }
-
         .envelope-body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 0; height: 0;
-            border-left: 46px solid transparent;
-            border-right: 46px solid transparent;
-            border-top: 36px solid #b88a44;
+            content: ''; position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 46px solid transparent; border-right: 46px solid transparent; border-top: 36px solid #b88a44;
         }
-
         .envelope-seal {
-            width: 22px; height: 22px;
-            background: #b71c1c; border: 2px solid #5f0909;
+            width: 22px; height: 22px; background: #b71c1c; border: 2px solid #5f0909;
             border-radius: 50%; position: absolute; top: 26px; left: 35px;
         }
-
         .red-dot-badge {
-            position: absolute; top: -10px; right: -10px;
-            width: 20px; height: 20px; background: #ff1744;
-            border: 2px solid #ffffff; border-radius: 50%;
+            position: absolute; top: -10px; right: -10px; width: 20px; height: 20px;
+            background: #ff1744; border: 2px solid #ffffff; border-radius: 50%;
             box-shadow: 0 0 10px #ff1744; animation: pulse-ring 1.2s infinite;
         }
 
         .pixel-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px; color: #ffeb3b; text-shadow: 2px 2px #000;
-            line-height: 1.6; margin-bottom: 12px;
+            font-family: 'Press Start 2P', cursive; font-size: 12px; color: #ffeb3b;
+            text-shadow: 2px 2px #000; line-height: 1.6; margin-bottom: 12px;
         }
 
         .pixel-sub { font-size: 13px; color: #b0bec5; }
@@ -282,18 +174,15 @@
         }
 
         .parchment-title {
-            font-family: 'Press Start 2P', cursive; font-size: 11px;
-            color: #8e1515; text-align: center; border-bottom: 2px dashed #8c6b43;
-            padding-bottom: 10px; margin-bottom: 14px;
+            font-family: 'Press Start 2P', cursive; font-size: 11px; color: #8e1515;
+            text-align: center; border-bottom: 2px dashed #8c6b43; padding-bottom: 10px; margin-bottom: 14px;
         }
 
         .quest-description { font-size: 14px; line-height: 1.6; margin-bottom: 14px; font-weight: 600; }
-
         .reward-box {
             background: rgba(0, 0, 0, 0.06); border: 2px solid #aa8355;
             border-radius: 4px; padding: 10px; font-size: 13px; margin-bottom: 18px;
         }
-
         .reward-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
         .reward-item { display: flex; align-items: center; gap: 4px; }
 
@@ -308,6 +197,23 @@
         .btn-accept { background: #2e7d32; color: #fff; }
         .btn-decline { background: #c62828; color: #fff; }
 
+        /* --- หน้า QUEST LIST VIEW (รายการภารกิจที่รับมา) --- */
+        #quest-list-view { display: none; padding: 22px 18px; }
+
+        .active-quest-card {
+            background: #140d21; border: 2px solid #f2a63b; padding: 12px;
+            border-radius: 4px; margin-bottom: 12px; cursor: pointer;
+            box-shadow: 2px 2px 0 #000; transition: transform 0.1s;
+            display: flex; justify-content: space-between; align-align: center;
+        }
+
+        .active-quest-card:active { transform: scale(0.98); }
+
+        .quest-card-info { display: flex; flex-direction: column; gap: 4px; }
+        .quest-card-title { color: #ffeb3b; font-weight: bold; font-size: 14px; }
+        .quest-card-status { color: #ff9800; font-size: 11px; font-weight: bold; }
+
+        /* --- หน้า TODO LIST VIEW --- */
         #todo-list-view { display: none; padding: 22px 18px; }
 
         .todo-header {
@@ -327,40 +233,24 @@
             background: #000; margin-right: 12px; display: flex; justify-content: center; align-items: center;
         }
 
-        .quest-item.completed .pixel-checkbox::after {
-            content: '✓'; color: #4caf50; font-weight: bold; font-size: 16px;
-        }
-
+        .quest-item.completed .pixel-checkbox::after { content: '✓'; color: #4caf50; font-weight: bold; font-size: 16px; }
         .quest-item.completed span { text-decoration: line-through; color: #7d6b9d; }
 
-        /* --- หน้า STATUS VIEW --- */
         #status-view { display: none; padding: 20px 16px; }
-
         .status-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-
         .status-row {
             background: #140d21; border: 2px solid #513e73; padding: 10px 14px;
             border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 14px;
         }
-
         .status-name { color: #ffeb3b; font-weight: bold; }
         .status-val { color: #ffffff; font-family: 'Press Start 2P', cursive; font-size: 12px; }
 
-        .delete-btn {
-            background: #c62828; color: white; border: 1px solid #000;
-            padding: 2px 6px; font-size: 10px; border-radius: 3px; cursor: pointer; display: none; margin-left: 8px;
-        }
-
-        /* --- หน้า SKILL VIEW --- */
         #skill-view { display: none; padding: 20px 16px; }
-
         .skill-list { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
-
         .skill-item {
             background: #140d21; border: 2px solid #513e73; padding: 12px;
             border-radius: 4px; display: flex; justify-content: space-between; align-items: center;
         }
-
         .skill-info { display: flex; flex-direction: column; gap: 4px; }
         .skill-title { color: #ffeb3b; font-weight: bold; font-size: 14px; }
         .skill-lvl { color: #81c784; font-family: 'Press Start 2P', cursive; font-size: 10px; }
@@ -371,13 +261,43 @@
             box-shadow: 2px 2px 0 #000;
         }
 
-        .lvl-up-btn:active { transform: translate(1px, 1px); box-shadow: 0 0 0; }
+        .delete-btn {
+            background: #c62828; color: white; border: 1px solid #000;
+            padding: 2px 6px; font-size: 10px; border-radius: 3px; cursor: pointer; display: none; margin-left: 8px;
+        }
 
         .add-btn {
             background: #3949ab; color: white; border: 2px solid #000;
             padding: 8px; font-family: 'Prompt', sans-serif; font-size: 12px;
             margin-top: 12px; width: 100%; cursor: pointer; display: none; border-radius: 4px;
         }
+
+        #item-view { display: none; padding: 26px 18px; text-align: center; }
+
+        .item-glow-box {
+            position: relative; width: 110px; height: 110px; margin: 15px auto;
+            background: radial-gradient(circle, rgba(255,235,59,0.3) 0%, rgba(0,0,0,0) 70%);
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .item-icon-display {
+            font-size: 64px; line-height: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
+            animation: float 2.5s ease-in-out infinite; cursor: pointer;
+        }
+
+        .item-name-tag {
+            font-size: 18px; font-weight: bold; color: #ffeb3b;
+            margin: 10px 0 20px 0; text-shadow: 2px 2px #000;
+        }
+
+        .btn-claim-item {
+            background: #f57c00; color: #ffffff; border: 3px solid #000;
+            font-family: 'Prompt', sans-serif; font-weight: bold; font-size: 16px;
+            padding: 12px 24px; border-radius: 4px; cursor: pointer;
+            box-shadow: 3px 3px 0px #000; width: 100%;
+        }
+
+        .btn-claim-item:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px #000; }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         @keyframes pulse-ring { 0% { transform: scale(0.95); } 70% { transform: scale(1.15); } 100% { transform: scale(0.95); } }
@@ -416,7 +336,7 @@
 
         <div class="viewport">
 
-            <!-- VIEW 1: ซองจดหมาย -->
+            <!-- VIEW 1: ซองจดหมาย (ภารกิจใหม่) -->
             <div id="notification-view" class="pixel-box" onclick="handleBoxClick(event, showQuestDetail)">
                 <div class="envelope-wrapper">
                     <div class="red-dot-badge"></div>
@@ -426,7 +346,7 @@
                 <p class="pixel-sub editable" id="text-notif-sub">(แตะที่ซองจดหมายเพื่อเปิดอ่าน)</p>
             </div>
 
-            <!-- VIEW 2: รายละเอียดภารกิจ -->
+            <!-- VIEW 2: รายละเอียดภารกิจก่อนตอบรับ -->
             <div id="quest-detail-view" class="pixel-box">
                 <div class="parchment-title editable" id="text-quest-title">-- QUEST DETAILS --</div>
                 <div class="quest-description">
@@ -447,7 +367,22 @@
                 </div>
             </div>
 
-            <!-- VIEW 3: รายการ To-Do -->
+            <!-- VIEW 3: รายการภารกิจที่กำลังดำเนินการ (QUEST LIST) -->
+            <div id="quest-list-view" class="pixel-box">
+                <div class="todo-header editable" id="text-quest-list-header">ACTIVE QUESTS</div>
+                <div id="active-quests-container">
+                    <div class="active-quest-card" onclick="handleBoxClick(event, () => navigateTo('todo-list-view'))">
+                        <div class="quest-card-info">
+                            <span class="quest-card-title editable">⚔️ ปกป้องหมู่บ้านพิกเซล</span>
+                            <span class="quest-card-status">⏳ กำลังดำเนินการ...</span>
+                        </div>
+                        <button class="delete-btn" onclick="deleteItem(this); event.stopPropagation();">🗑️</button>
+                    </div>
+                </div>
+                <button class="add-btn" id="add-quest-card-btn" onclick="addNewQuestCard()">➕ เพิ่มภารกิจใหม่</button>
+            </div>
+
+            <!-- VIEW 4: รายการ To-Do List ของภารกิจ -->
             <div id="todo-list-view" class="pixel-box">
                 <div class="todo-header editable" id="text-todo-header">QUEST OBJECTIVES</div>
                 <ul class="quest-item-list" id="quest-list">
@@ -463,7 +398,7 @@
                 <button class="add-btn" id="add-task-btn" onclick="addNewTask()">➕ เพิ่มหัวข้อภารกิจใหม่</button>
             </div>
 
-            <!-- VIEW 4: หน้า STATUS ตัวละคร -->
+            <!-- VIEW 5: หน้า STATUS ตัวละคร -->
             <div id="status-view" class="pixel-box">
                 <div class="todo-header editable" id="text-status-header">CHARACTER STATUS</div>
                 <div class="status-grid" id="status-list">
@@ -475,15 +410,11 @@
                         <span class="status-name editable">🛡️ DEF (พลังป้องกัน)</span>
                         <div><span class="status-val editable">28</span><button class="delete-btn" onclick="deleteItem(this)">🗑️</button></div>
                     </div>
-                    <div class="status-row">
-                        <span class="status-name editable">⚡ SPD (ความเร็ว)</span>
-                        <div><span class="status-val editable">15</span><button class="delete-btn" onclick="deleteItem(this)">🗑️</button></div>
-                    </div>
                 </div>
                 <button class="add-btn" id="add-status-btn" onclick="addNewStatus()">➕ เพิ่มค่าสถานะใหม่</button>
             </div>
 
-            <!-- VIEW 5: หน้า SKILL -->
+            <!-- VIEW 6: หน้า SKILL -->
             <div id="skill-view" class="pixel-box">
                 <div class="todo-header editable" id="text-skill-header">SKILL TREE</div>
                 <div class="skill-list" id="skill-list">
@@ -497,27 +428,32 @@
                             <button class="delete-btn" onclick="deleteItem(this)">🗑️</button>
                         </div>
                     </div>
-                    <div class="skill-item">
-                        <div class="skill-info">
-                            <span class="skill-title editable">💚 Heal (เวทรักษา)</span>
-                            <span class="skill-lvl">Lv. <span class="lvl-num editable">1</span></span>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:6px;">
-                            <button class="lvl-up-btn" onclick="upgradeSkill(this)">+1 Up</button>
-                            <button class="delete-btn" onclick="deleteItem(this)">🗑️</button>
-                        </div>
-                    </div>
                 </div>
                 <button class="add-btn" id="add-skill-btn" onclick="addNewSkill()">➕ เพิ่มสกิลใหม่</button>
+            </div>
+
+            <!-- VIEW 7: หน้าได้รับไอเทมใหม่ (ITEM RECEIVED VIEW) -->
+            <div id="item-view" class="pixel-box">
+                <div class="todo-header editable" id="text-item-header">! YOU FOUND AN ITEM !</div>
+                
+                <div class="item-glow-box">
+                    <div class="item-icon-display editable" id="text-item-icon">🗡️</div>
+                </div>
+
+                <div class="item-name-tag editable" id="text-item-name">ดาบแห่งตำนาน (Excalibur)</div>
+
+                <button class="btn-claim-item" onclick="claimItem()">🎁 กดรับไอเทม</button>
             </div>
 
         </div>
 
         <!-- แถบ Navigation ด้านล่างสำหรับสลับหน้า -->
         <div class="nav-bar">
-            <button class="nav-btn active" id="nav-quest" onclick="switchTab('quest')">📜 Quest</button>
+            <button class="nav-btn active" id="nav-new-quest" onclick="switchTab('new-quest')">✉️ New Quest</button>
+            <button class="nav-btn" id="nav-quest-list" onclick="switchTab('quest-list')">📜 Quests</button>
             <button class="nav-btn" id="nav-status" onclick="switchTab('status')">👤 Status</button>
             <button class="nav-btn" id="nav-skill" onclick="switchTab('skill')">⚡ Skill</button>
+            <button class="nav-btn" id="nav-item" onclick="switchTab('item')">🎁 Item</button>
         </div>
 
     </div>
@@ -525,28 +461,32 @@
     <script>
         let isEditing = false;
         let pageHistory = ['notification-view'];
-        let currentTab = 'quest';
 
         window.onload = function() { loadSavedData(); };
 
         function switchTab(tab) {
-            currentTab = tab;
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-            if (tab === 'quest') {
-                document.getElementById('nav-quest').classList.add('active');
+            if (tab === 'new-quest') {
+                document.getElementById('nav-new-quest').classList.add('active');
                 navigateTo('notification-view');
+            } else if (tab === 'quest-list') {
+                document.getElementById('nav-quest-list').classList.add('active');
+                navigateTo('quest-list-view');
             } else if (tab === 'status') {
                 document.getElementById('nav-status').classList.add('active');
                 navigateTo('status-view');
             } else if (tab === 'skill') {
                 document.getElementById('nav-skill').classList.add('active');
                 navigateTo('skill-view');
+            } else if (tab === 'item') {
+                document.getElementById('nav-item').classList.add('active');
+                navigateTo('item-view');
             }
         }
 
         function navigateTo(pageId) {
-            const views = ['notification-view', 'quest-detail-view', 'todo-list-view', 'status-view', 'skill-view'];
+            const views = ['notification-view', 'quest-detail-view', 'quest-list-view', 'todo-list-view', 'status-view', 'skill-view', 'item-view'];
             views.forEach(v => document.getElementById(v).style.display = 'none');
             
             document.getElementById(pageId).style.display = 'block';
@@ -562,7 +502,7 @@
                 pageHistory.pop();
                 const previousPage = pageHistory[pageHistory.length - 1];
                 
-                const views = ['notification-view', 'quest-detail-view', 'todo-list-view', 'status-view', 'skill-view'];
+                const views = ['notification-view', 'quest-detail-view', 'quest-list-view', 'todo-list-view', 'status-view', 'skill-view', 'item-view'];
                 views.forEach(v => document.getElementById(v).style.display = 'none');
                 document.getElementById(previousPage).style.display = 'block';
 
@@ -577,9 +517,12 @@
 
         function showQuestDetail() { navigateTo('quest-detail-view'); }
         function declineQuest() { navigateTo('notification-view'); }
-        function acceptQuest() { navigateTo('todo-list-view'); }
+        function acceptQuest() { switchTab('quest-list'); }
 
-        /* ระบบอัปเกรดระดับ Skill */
+        function claimItem() {
+            alert("🎉 คุณได้รับไอเทมแล้ว! เก็บเข้าสู่คลังสัมภาระเรียบร้อย");
+        }
+
         function upgradeSkill(btn) {
             const lvlSpan = btn.closest('.skill-item').querySelector('.lvl-num');
             let currentLvl = parseInt(lvlSpan.innerText) || 1;
@@ -621,8 +564,17 @@
         function handleTaskClick(event, element) { if (!isEditing) element.classList.toggle('completed'); }
 
         function deleteItem(btn) {
-            const parent = btn.closest('.status-row, .skill-item');
+            const parent = btn.closest('.status-row, .skill-item, .active-quest-card');
             if (parent) parent.remove();
+        }
+
+        function addNewQuestCard() {
+            const container = document.getElementById('active-quests-container');
+            const div = document.createElement('div');
+            div.className = 'active-quest-card';
+            div.setAttribute('onclick', "handleBoxClick(event, () => navigateTo('todo-list-view'))");
+            div.innerHTML = `<div class="quest-card-info"><span class="quest-card-title editable" contenteditable="true">⚔️ ภารกิจใหม่</span><span class="quest-card-status">⏳ กำลังดำเนินการ...</span></div><button class="delete-btn" style="display:inline-block" onclick="deleteItem(this); event.stopPropagation();">🗑️</button>`;
+            container.appendChild(div);
         }
 
         function addNewStatus() {
@@ -667,6 +619,7 @@
             data['reward-list-html'] = document.getElementById('reward-list').innerHTML;
             data['status-list-html'] = document.getElementById('status-list').innerHTML;
             data['skill-list-html'] = document.getElementById('skill-list').innerHTML;
+            data['active-quests-html'] = document.getElementById('active-quests-container').innerHTML;
             localStorage.setItem('rpg_quest_data', JSON.stringify(data));
         }
 
@@ -679,6 +632,7 @@
                     else if (id === 'reward-list-html') document.getElementById('reward-list').innerHTML = data[id];
                     else if (id === 'status-list-html') document.getElementById('status-list').innerHTML = data[id];
                     else if (id === 'skill-list-html') document.getElementById('skill-list').innerHTML = data[id];
+                    else if (id === 'active-quests-html') document.getElementById('active-quests-container').innerHTML = data[id];
                     else {
                         const el = document.getElementById(id);
                         if (el) el.innerHTML = data[id];
