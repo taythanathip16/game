@@ -175,11 +175,13 @@
         #quest-detail-view {
             display: none; background: #eedbb0; color: #2c1a0e;
             border: 5px solid #6d4c27; outline: 4px solid #1a0f07; padding: 18px 14px;
+            cursor: pointer;
         }
 
         .parchment-title {
             font-family: 'Press Start 2P', cursive; font-size: 10px; color: #8e1515;
             text-align: center; border-bottom: 2px dashed #8c6b43; padding-bottom: 8px; margin-bottom: 12px;
+            min-height: 24px;
         }
 
         .quest-description { font-size: 13px; line-height: 1.5; margin-bottom: 12px; font-weight: 600; min-height: 70px; }
@@ -348,8 +350,8 @@
                 <p class="pixel-sub editable" id="text-notif-sub">(แตะที่ซองจดหมายเพื่อเปิดอ่าน)</p>
             </div>
 
-            <!-- VIEW 2: รายละเอียดภารกิจ -->
-            <div id="quest-detail-view" class="pixel-box">
+            <!-- VIEW 2: รายละเอียดภารกิจ (มี Typewriter Effect เพิ่มเข้ามา) -->
+            <div id="quest-detail-view" class="pixel-box" onclick="skipDetailTypewriter(event)">
                 <div class="parchment-title editable" id="text-quest-title">-- QUEST DETAILS --</div>
                 <div class="quest-description">
                     <span class="editable" id="text-quest-name">ภารกิจ: ปกป้องหมู่บ้านพิกเซล</span><br>
@@ -369,7 +371,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 3: รายการภารกิจที่กำลังดำเนินการ (Typewriter Effect ทำงานที่นี่) -->
+            <!-- VIEW 3: รายการภารกิจที่กำลังดำเนินการ -->
             <div id="quest-list-view" class="pixel-box" onclick="skipQuestListTypewriter()">
                 <div class="todo-header editable" id="text-quest-list-header">ACTIVE QUESTS</div>
                 <div id="active-quests-container">
@@ -460,9 +462,15 @@
     <script>
         let isEditing = false;
         let pageHistory = ['notification-view'];
-        let typewriterTimer = null;
+        
+        let typewriterTimerList = null;
         let fullQuestHeader = '';
         let fullQuestTitle = '';
+
+        let typewriterTimerDetail = null;
+        let fullDetailTitle = '';
+        let fullDetailName = '';
+        let fullDetailDesc = '';
 
         window.onload = function() { loadSavedData(); };
 
@@ -499,7 +507,58 @@
             updateBackButton();
         }
 
-        /* --- Typewriter Effect สำหรับหน้า รายการภารกิจ (Quests) --- */
+        /* --- Typewriter Effect สำหรับหน้า รายละเอียดภารกิจ (Quest Detail) --- */
+        function startDetailTypewriter() {
+            if (isEditing) return;
+
+            const titleEl = document.getElementById('text-quest-title');
+            const nameEl = document.getElementById('text-quest-name');
+            const descEl = document.getElementById('text-quest-desc');
+
+            if (titleEl && nameEl && descEl) {
+                if (!fullDetailTitle) fullDetailTitle = titleEl.innerText;
+                if (!fullDetailName) fullDetailName = nameEl.innerText;
+                if (!fullDetailDesc) fullDetailDesc = descEl.innerText;
+
+                titleEl.innerText = '';
+                nameEl.innerText = '';
+                descEl.innerText = '';
+
+                let i = 0, j = 0, k = 0;
+                clearInterval(typewriterTimerDetail);
+
+                typewriterTimerDetail = setInterval(() => {
+                    if (i < fullDetailTitle.length) {
+                        titleEl.innerText += fullDetailTitle.charAt(i);
+                        i++;
+                    } else if (j < fullDetailName.length) {
+                        nameEl.innerText += fullDetailName.charAt(j);
+                        j++;
+                    } else if (k < fullDetailDesc.length) {
+                        descEl.innerText += fullDetailDesc.charAt(k);
+                        k++;
+                    } else {
+                        clearInterval(typewriterTimerDetail);
+                    }
+                }, 30);
+            }
+        }
+
+        function skipDetailTypewriter(e) {
+            if (isEditing) return;
+            if (e && (e.target.tagName === 'BUTTON' || e.target.classList.contains('editable'))) return;
+
+            clearInterval(typewriterTimerDetail);
+            const titleEl = document.getElementById('text-quest-title');
+            const nameEl = document.getElementById('text-quest-name');
+            const descEl = document.getElementById('text-quest-desc');
+
+            if (titleEl && fullDetailTitle) titleEl.innerText = fullDetailTitle;
+            if (nameEl && fullDetailName) nameEl.innerText = fullDetailName;
+            if (descEl && fullDetailDesc) descEl.innerText = fullDetailDesc;
+        }
+
+        /* --- Typewriter Effect สำหรับหน้า รายการภารกิจ (Quests List) --- */
         function startQuestListTypewriter() {
             if (isEditing) return;
 
@@ -515,9 +574,9 @@
 
                 let i = 0;
                 let j = 0;
-                clearInterval(typewriterTimer);
+                clearInterval(typewriterTimerList);
 
-                typewriterTimer = setInterval(() => {
+                typewriterTimerList = setInterval(() => {
                     if (i < fullQuestHeader.length) {
                         headerEl.innerText += fullQuestHeader.charAt(i);
                         i++;
@@ -525,7 +584,7 @@
                         questTitleEl.innerText += fullQuestTitle.charAt(j);
                         j++;
                     } else {
-                        clearInterval(typewriterTimer);
+                        clearInterval(typewriterTimerList);
                     }
                 }, 40);
             }
@@ -533,12 +592,17 @@
 
         function skipQuestListTypewriter() {
             if (isEditing) return;
-            clearInterval(typewriterTimer);
+            clearInterval(typewriterTimerList);
             const headerEl = document.getElementById('text-quest-list-header');
             const questTitleEl = document.getElementById('first-quest-title');
 
             if (headerEl && fullQuestHeader) headerEl.innerText = fullQuestHeader;
             if (questTitleEl && fullQuestTitle) questTitleEl.innerText = fullQuestTitle;
+        }
+
+        function showQuestDetail() { 
+            navigateTo('quest-detail-view'); 
+            startDetailTypewriter();
         }
 
         function acceptQuest() { 
@@ -547,7 +611,6 @@
         }
 
         function declineQuest() { navigateTo('notification-view'); }
-        function showQuestDetail() { navigateTo('quest-detail-view'); }
 
         function goBackPage() {
             if (pageHistory.length > 1) {
@@ -589,6 +652,7 @@
 
             if (isEditing) {
                 skipQuestListTypewriter();
+                skipDetailTypewriter();
                 btn.innerText = "💾 บันทึก";
                 btn.classList.add('active');
                 app.classList.add('editing-active');
@@ -605,10 +669,18 @@
                 delBtns.forEach(b => b.style.display = 'none');
                 editables.forEach(el => el.contentEditable = "false");
 
+                // Update text cache after saving
                 const headerEl = document.getElementById('text-quest-list-header');
                 const questTitleEl = document.getElementById('first-quest-title');
                 if (headerEl) fullQuestHeader = headerEl.innerText;
                 if (questTitleEl) fullQuestTitle = questTitleEl.innerText;
+
+                const titleEl = document.getElementById('text-quest-title');
+                const nameEl = document.getElementById('text-quest-name');
+                const descEl = document.getElementById('text-quest-desc');
+                if (titleEl) fullDetailTitle = titleEl.innerText;
+                if (nameEl) fullDetailName = nameEl.innerText;
+                if (descEl) fullDetailDesc = descEl.innerText;
 
                 saveData();
                 alert("บันทึกการแก้ไขเรียบร้อยแล้ว!");
@@ -694,10 +766,19 @@
                     }
                 }
             }
+
+            // Cache full text values
             const headerEl = document.getElementById('text-quest-list-header');
             const questTitleEl = document.getElementById('first-quest-title');
             if (headerEl) fullQuestHeader = headerEl.innerText;
             if (questTitleEl) fullQuestTitle = questTitleEl.innerText;
+
+            const titleEl = document.getElementById('text-quest-title');
+            const nameEl = document.getElementById('text-quest-name');
+            const descEl = document.getElementById('text-quest-desc');
+            if (titleEl) fullDetailTitle = titleEl.innerText;
+            if (nameEl) fullDetailName = nameEl.innerText;
+            if (descEl) fullDetailDesc = descEl.innerText;
         }
     </script>
 
