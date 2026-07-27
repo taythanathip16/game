@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <!-- Meta tag ป้องกันการซูมและปรับหน้าจอให้พอดีกับมือถือ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>RPG Quest Mobile - Retro 90s</title>
+
+    <!-- PWA & Mobile Web App Meta Tags (สำหรับเปิดแบบเต็มจอ เหมือน App) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RPG Quest">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0d0d18">
+
+    <!-- Web App Manifest (ทำให้อยู่ในรูปแบบ App แท้ๆ) -->
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22RPG%20Quest%2090s%22%2C%22short_name%22%3A%22RPGQuest%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230d0d18%22%2C%22theme_color%22%3A%22%230d0d18%22%7D">
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0d0d18;
+            color: #ffffff;
+            font-family: 'Prompt', sans-serif;
+            position: fixed; /* ป้องกันการไถล/เด้ง Scroll บน iOS */
+        }
+
+        /* Container ปรับขนาดเต็มหน้าจอมือถือจริง (Full Screen App) */
+        .app-fullscreen {
+            width: 100vw;
+            height: 100vh;
+            /* รองรับ Notch/Dynamic Island ของ iPhone */
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            padding-left: env(safe-area-inset-left, 0px);
+            padding-right: env(safe-area-inset-right, 0px);
+            background: #2a3a28;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Pixel Tile Pattern Background */
+        .game-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(18, 25, 16, 0.7), rgba(18, 25, 16, 0.7)),
+                repeating-linear-gradient(0deg, #2f422b 0px, #2f422b 16px, #253622 16px, #253622 32px),
+                repeating-linear-gradient(90deg, transparent 0px, transparent 16px, rgba(0,0,0,0.15) 16px, rgba(0,0,0,0.15) 32px);
+            z-index: 1;
+        }
+
+        /* Top Status Bar (Retro RPG Header) */
+        .top-hud {
+            position: relative;
+            z-index: 10;
+            background: #1b1328;
+            border-bottom: 4px solid #f2a63b;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        }
+
+        .hero-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .bar-bg {
+            width: 90px;
+            height: 10px;
+            background: #000;
+            border: 1px solid #777;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill-hp { width: 100%; height: 100%; background: #e53935; }
+        .bar-fill-mp { width: 80%; height: 100%; background: #1e88e5; }
+
+        .gold-display {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: #ffd700;
+            background: #0a0710;
+            padding: 8px 12px;
+            border: 2px solid #b8860b;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Fullscreen Controls (ปุ่มขยายเต็มจอ/คำแนะนำ) */
+        .fullscreen-btn {
+            position: absolute;
+            top: 70px;
+            right: 12px;
+            z-index: 20;
+            background: #f2a63b;
+            color: #100b1a;
+            border: 2px solid #000;
+            font-family: 'Prompt', sans-serif;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            box-shadow: 2px 2px 0 #000;
+            cursor: pointer;
+        }
+
+        /* Viewport Area */
+        .viewport {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Pixel Border Window Box */
+        .pixel-box {
+            background: #231b34;
+            border: 4px solid #f2a63b;
+            outline: 4px solid #100b1a;
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8), 4px 4px 0px #000;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        /* STEP 1: Envelope Notification */
+        #notification-view {
+            text-align: center;
+            cursor: pointer;
+            padding: 30px 20px;
+            animation: float 2.5s ease-in-out infinite;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 100px;
+            height: 70px;
+            margin: 0 auto 20px auto;
+        }
+
+        .envelope-body {
+            width: 100%;
+            height: 100%;
+            background: #e6be75;
+            border: 4px solid #4a2e15;
+            position: relative;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .envelope-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 46px solid transparent;
+            border-right: 46px solid transparent;
+            border-top: 36px solid #b88a44;
+        }
+
+        .envelope-seal {
+            width: 22px;
+            height: 22px;
+            background: #b71c1c;
+            border: 2px solid #5f0909;
+            border-radius: 50%;
+            position: absolute;
+            top: 26px;
+            left: 35px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .red-dot-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: #ff1744;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff1744;
+            animation: pulse-ring 1.2s infinite;
+        }
+
+        .pixel-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #ffeb3b;
+            text-shadow: 2px 2px #000;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .pixel-sub {
+            font-size: 13px;
+            color: #b0bec5;
+        }
+
+        /* STEP 2: Quest Detail Parchment */
+        #quest-detail-view {
+            display: none;
+            background: #eedbb0;
+            color: #2c1a0e;
+            border: 5px solid #6d4c27;
+            outline: 4px solid #1a0f07;
+            padding: 22px 18px;
+        }
+
+        .parchment-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: #8e1515;
+            text-align: center;
+            border-bottom: 2px dashed #8c6b43;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .quest-description {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+
+        .reward-box {
+            background: rgba(0, 0, 0, 0.06);
+            border: 2px solid #aa8355;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .reward-box strong {
+            color: #5d3a1a;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .btn-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rpg-btn {
+            font-family: 'Prompt', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 12px;
+            border: 3px solid #000;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px #000;
+            transition: all 0.1s;
+            text-align: center;
+            border-radius: 2px;
+        }
+
+        .rpg-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        .btn-accept { background: #2e7d32; color: #fff; }
+        .btn-accept:hover { background: #388e3c; }
+
+        .btn-decline { background: #c62828; color: #fff; }
+        .btn-decline:hover { background: #d32f2f; }
+
+        /* STEP 3: Quest Log To-Do List */
+        #todo-list-view {
+            display: none;
+            padding: 22px 18px;
+        }
+
+        .todo-header {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: #ffeb3b;
+            text-align: center;
+            margin-bottom: 18px;
+            text-shadow: 2px 2px #000;
+        }
+
+        .quest-item-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quest-item {
+            background: #140d21;
+            border: 2px solid #513e73;
+            padding: 14px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .quest-item:hover {
+            background: #251a3b;
+        }
+
+        .pixel-checkbox {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            border: 2px solid #ffeb3b;
+            background: #000;
+            margin-right: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quest-item.completed .pixel-checkbox::after {
+            content: '✓';
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .quest-item.completed span {
+            text-decoration: line-through;
+            color: #7d6b9d;
+        }
+
+        /* Bottom Status Bar */
+        .bottom-hud {
+            position: relative;
+            z-index: 10;
+            background: #100b1a;
+            border-top: 3px solid #f2a63b;
+            padding: 12px;
+            text-align: center;
+            font-size: 10px;
+            color: #7e6b9c;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 23, 68, 0.7); }
+            70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(255, 23, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 23, 68, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-fullscreen">
+        
+        <!-- Background Layer -->
+        <div class="game-bg"></div>
+
+        <!-- ปุ่มซ่อน/เปิด Fullscreen สำหรับ Browser -->
+        <button class="fullscreen-btn" onclick="toggleFullScreen()">Fullscreen ⛶</button>
+
+        <!-- Top Status Bar / HUD -->
+        <div class="top-hud">
+            <div class="hero-stats">
+                <div class="stat-bar">
+                    <span>HP</span>
+                    <div class="bar-bg"><div class="bar-fill-hp"></div></div>
+                    <span>120/120</span>
+                </div>
+                <div class="stat-bar">
+                    <span>MP</span>
+                    <div class="bar-bg"><div class="bar-fill-mp"></div></div>
+                    <span>40/50</span>
+                </div>
+            </div>
+            <div class="gold-display">
+                🪙 <span>500 G</span>
+            </div>
+        </div>
+
+        <!-- Viewport Area (Main Interactive Screen) -->
+        <div class="viewport">
+
+            <!-- STATE 1: Envelope Notification -->
+            <div id="notification-view" class="pixel-box" onclick="showQuestDetail()">
+                <div class="envelope-wrapper">
+                    <div class="red-dot-badge"></div>
+                    <div class="envelope-body">
+                        <div class="envelope-seal"></div>
+                    </div>
+                </div>
+                <div class="pixel-title">! NEW QUEST !<br>RECEIVED</div>
+                <p class="pixel-sub">(แตะที่ซองจดหมายเพื่อเปิดอ่าน)</p>
+            </div>
+
+            <!-- STATE 2: Quest Details Modal -->
+            <div id="quest-detail-view" class="pixel-box">
+                <div class="parchment-title">-- QUEST DETAILS --</div>
+                <div class="quest-description">
+                    <strong>ภารกิจ: ปกป้องหมู่บ้านพิกเซล</strong><br>
+                    พวกสไลม์ป่ากำลังบุกรุกหมู่บ้านทาบาตะ! โปรดช่วยชาวบ้านกำจัดพวกมัน และค้นหาสมบัติที่หายไปในถ้ำทิศตะวันออก
+                </div>
+                <div class="reward-box">
+                    <strong>🎁 รางวัลภารกิจ:</strong>
+                    • 500 Gold<br>
+                    • ดาบไม้ผู้กล้า x1
+                </div>
+                <div class="btn-stack">
+                    <button class="rpg-btn btn-accept" onclick="acceptQuest()">ยอมรับภารกิจ</button>
+                    <button class="rpg-btn btn-decline" onclick="declineQuest()">ยกเลิก / ปฏิเสธ</button>
+                </div>
+            </div>
+
+            <!-- STATE 3: Active Quest To-Do List -->
+            <div id="todo-list-view" class="pixel-box">
+                <div class="todo-header">QUEST OBJECTIVES</div>
+                <ul class="quest-item-list">
+                    <li class="quest-item" onclick="toggleQuestTask(this)">
+                        <div class="pixel-checkbox"></div>
+                        <span>กำจัดสไลม์ป่า (0/10)</span>
+                    </li>
+                    <li class="quest-item" onclick="toggleQuestTask(this)">
+                        <div class="pixel-checkbox"></div>
+                        <span>ค้นหาสมบัติในถ้ำตะวันออก</span>
+                    </li>
+                    <li class="quest-item" onclick="toggleQuestTask(this)">
+                        <div class="pixel-checkbox"></div>
+                        <span>คุยกับหัวหน้าหมู่บ้าน</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Bottom Status Bar -->
+        <div class="bottom-hud">
+            RPG MAKER 90s • FULLSCREEN APP
+        </div>
+
+    </div>
+
+    <script>
+        function showQuestDetail() {
+            document.getElementById('notification-view').style.display = 'none';
+            document.getElementById('quest-detail-view').style.display = 'block';
+        }
+
+        function declineQuest() {
+            document.getElementById('quest-detail-view').style.display = 'none';
+            document.getElementById('notification-view').style.display = 'block';
+        }
+
+        function acceptQuest() {
+            document.getElementById('quest-detail-view').style.display = 'none';
+            document.getElementById('todo-list-view').style.display = 'block';
+        }
+
+        function toggleQuestTask(element) {
+            element.classList.toggle('completed');
+        }
+
+        // ฟังก์ชันบังคับเปิดเต็มจอแบบ Fullscreen API
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert("กรุณาใช้ฟังก์ชั่น 'เพิ่มไปยังหน้าจอหลัก' (Add to Home Screen) เพื่อประสบการณ์เต็มจอที่ดีที่สุดครับ");
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
