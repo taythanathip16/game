@@ -24,7 +24,6 @@
             padding: 0;
         }
 
-        /* ไฮไลต์ส่วนที่แก้ไขได้เมื่อเปิดโหมดแก้ไข */
         .editing-active [contenteditable="true"] {
             user-select: text !important;
             -webkit-user-select: text !important;
@@ -78,7 +77,7 @@
             z-index: 10;
             background: #1b1328;
             border-bottom: 4px solid #f2a63b;
-            padding: 14px 18px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -100,7 +99,7 @@
         }
 
         .bar-bg {
-            width: 90px;
+            width: 80px;
             height: 10px;
             background: #000;
             border: 1px solid #777;
@@ -117,7 +116,7 @@
             font-size: 10px;
             color: #ffd700;
             background: #0a0710;
-            padding: 8px 12px;
+            padding: 6px 10px;
             border: 2px solid #b8860b;
             border-radius: 4px;
             display: flex;
@@ -125,7 +124,39 @@
             gap: 6px;
         }
 
-        /* ปุ่มโหมดแก้ไขข้อความ */
+        /* เมนูด้านล่างสุดสำหรับกดสลับหน้า */
+        .nav-bar {
+            position: relative;
+            z-index: 15;
+            background: #140d21;
+            border-top: 3px solid #f2a63b;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 4px;
+        }
+
+        .nav-btn {
+            background: #2a1f40;
+            color: #ffeb3b;
+            border: 2px solid #513e73;
+            font-family: 'Prompt', sans-serif;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+            margin: 0 4px;
+            text-align: center;
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        .nav-btn:active, .nav-btn.active {
+            background: #f2a63b;
+            color: #000;
+            border-color: #fff;
+        }
+
         .edit-toggle-btn {
             position: absolute;
             top: 70px;
@@ -148,10 +179,9 @@
             animation: blink 1s infinite;
         }
 
-        /* ปุ่ม Back Page */
         .back-page-btn {
             position: absolute;
-            bottom: 50px;
+            bottom: 60px;
             left: 12px;
             z-index: 20;
             background: #37474f;
@@ -169,11 +199,6 @@
             gap: 4px;
         }
 
-        .back-page-btn:active {
-            transform: translate(1px, 1px);
-            box-shadow: 1px 1px 0 #000;
-        }
-
         .viewport {
             position: relative;
             z-index: 5;
@@ -181,7 +206,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
+            overflow-y: auto;
         }
 
         .pixel-box {
@@ -193,6 +219,8 @@
             width: 100%;
             max-width: 400px;
             position: relative;
+            max-height: 100%;
+            overflow-y: auto;
         }
 
         #notification-view {
@@ -221,242 +249,139 @@
         .envelope-body::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
+            top: 0; left: 0; width: 0; height: 0;
             border-left: 46px solid transparent;
             border-right: 46px solid transparent;
             border-top: 36px solid #b88a44;
         }
 
         .envelope-seal {
-            width: 22px;
-            height: 22px;
-            background: #b71c1c;
-            border: 2px solid #5f0909;
-            border-radius: 50%;
-            position: absolute;
-            top: 26px;
-            left: 35px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            width: 22px; height: 22px;
+            background: #b71c1c; border: 2px solid #5f0909;
+            border-radius: 50%; position: absolute; top: 26px; left: 35px;
         }
 
         .red-dot-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 20px;
-            height: 20px;
-            background: #ff1744;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #ff1744;
-            animation: pulse-ring 1.2s infinite;
+            position: absolute; top: -10px; right: -10px;
+            width: 20px; height: 20px; background: #ff1744;
+            border: 2px solid #ffffff; border-radius: 50%;
+            box-shadow: 0 0 10px #ff1744; animation: pulse-ring 1.2s infinite;
         }
 
         .pixel-title {
             font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            color: #ffeb3b;
-            text-shadow: 2px 2px #000;
-            line-height: 1.6;
-            margin-bottom: 12px;
+            font-size: 12px; color: #ffeb3b; text-shadow: 2px 2px #000;
+            line-height: 1.6; margin-bottom: 12px;
         }
 
-        .pixel-sub {
-            font-size: 13px;
-            color: #b0bec5;
-        }
+        .pixel-sub { font-size: 13px; color: #b0bec5; }
 
         #quest-detail-view {
-            display: none;
-            background: #eedbb0;
-            color: #2c1a0e;
-            border: 5px solid #6d4c27;
-            outline: 4px solid #1a0f07;
-            padding: 22px 18px;
+            display: none; background: #eedbb0; color: #2c1a0e;
+            border: 5px solid #6d4c27; outline: 4px solid #1a0f07; padding: 22px 18px;
         }
 
         .parchment-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 11px;
-            color: #8e1515;
-            text-align: center;
-            border-bottom: 2px dashed #8c6b43;
-            padding-bottom: 10px;
-            margin-bottom: 14px;
+            font-family: 'Press Start 2P', cursive; font-size: 11px;
+            color: #8e1515; text-align: center; border-bottom: 2px dashed #8c6b43;
+            padding-bottom: 10px; margin-bottom: 14px;
         }
 
-        .quest-description {
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 14px;
-            font-weight: 600;
-        }
+        .quest-description { font-size: 14px; line-height: 1.6; margin-bottom: 14px; font-weight: 600; }
 
         .reward-box {
-            background: rgba(0, 0, 0, 0.06);
-            border: 2px solid #aa8355;
-            border-radius: 4px;
-            padding: 10px;
-            font-size: 13px;
-            margin-bottom: 18px;
+            background: rgba(0, 0, 0, 0.06); border: 2px solid #aa8355;
+            border-radius: 4px; padding: 10px; font-size: 13px; margin-bottom: 18px;
         }
 
-        .reward-box strong {
-            color: #5d3a1a;
-            display: block;
-            margin-bottom: 6px;
-        }
+        .reward-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+        .reward-item { display: flex; align-items: center; gap: 4px; }
 
-        .reward-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .reward-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .add-reward-btn {
-            background: #8c6b43;
-            color: #fff;
-            border: 1px solid #000;
-            font-size: 11px;
-            padding: 2px 8px;
-            margin-top: 8px;
-            cursor: pointer;
-            border-radius: 3px;
-            display: none;
-        }
-
-        .btn-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .btn-stack { display: flex; flex-direction: column; gap: 10px; }
 
         .rpg-btn {
-            font-family: 'Prompt', sans-serif;
-            font-weight: 700;
-            font-size: 16px;
-            padding: 12px;
-            border: 3px solid #000;
-            cursor: pointer;
-            box-shadow: 3px 3px 0px #000;
-            transition: all 0.1s;
-            text-align: center;
-            border-radius: 2px;
-        }
-
-        .rpg-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0px #000;
+            font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 15px;
+            padding: 10px; border: 3px solid #000; cursor: pointer;
+            box-shadow: 3px 3px 0px #000; text-align: center; border-radius: 2px;
         }
 
         .btn-accept { background: #2e7d32; color: #fff; }
         .btn-decline { background: #c62828; color: #fff; }
 
-        #todo-list-view {
-            display: none;
-            padding: 22px 18px;
-        }
+        #todo-list-view { display: none; padding: 22px 18px; }
 
         .todo-header {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 11px;
-            color: #ffeb3b;
-            text-align: center;
-            margin-bottom: 18px;
-            text-shadow: 2px 2px #000;
+            font-family: 'Press Start 2P', cursive; font-size: 11px;
+            color: #ffeb3b; text-align: center; margin-bottom: 18px; text-shadow: 2px 2px #000;
         }
 
-        .quest-item-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .quest-item-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 
         .quest-item {
-            background: #140d21;
-            border: 2px solid #513e73;
-            padding: 14px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            font-size: 14px;
+            background: #140d21; border: 2px solid #513e73; padding: 12px;
+            border-radius: 4px; display: flex; align-items: center; cursor: pointer; font-size: 14px;
         }
 
         .pixel-checkbox {
-            width: 22px;
-            height: 22px;
-            min-width: 22px;
-            border: 2px solid #ffeb3b;
-            background: #000;
-            margin-right: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 22px; height: 22px; min-width: 22px; border: 2px solid #ffeb3b;
+            background: #000; margin-right: 12px; display: flex; justify-content: center; align-items: center;
         }
 
         .quest-item.completed .pixel-checkbox::after {
-            content: '✓';
-            color: #4caf50;
-            font-weight: bold;
-            font-size: 16px;
+            content: '✓'; color: #4caf50; font-weight: bold; font-size: 16px;
         }
 
-        .quest-item.completed span {
-            text-decoration: line-through;
-            color: #7d6b9d;
+        .quest-item.completed span { text-decoration: line-through; color: #7d6b9d; }
+
+        /* --- หน้า STATUS VIEW --- */
+        #status-view { display: none; padding: 20px 16px; }
+
+        .status-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+
+        .status-row {
+            background: #140d21; border: 2px solid #513e73; padding: 10px 14px;
+            border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 14px;
         }
 
-        .add-task-btn {
-            background: #3949ab;
-            color: white;
-            border: 2px solid #000;
-            padding: 8px;
-            font-family: 'Prompt', sans-serif;
-            font-size: 12px;
-            margin-top: 12px;
-            width: 100%;
-            cursor: pointer;
-            display: none;
+        .status-name { color: #ffeb3b; font-weight: bold; }
+        .status-val { color: #ffffff; font-family: 'Press Start 2P', cursive; font-size: 12px; }
+
+        .delete-btn {
+            background: #c62828; color: white; border: 1px solid #000;
+            padding: 2px 6px; font-size: 10px; border-radius: 3px; cursor: pointer; display: none; margin-left: 8px;
         }
 
-        .bottom-hud {
-            position: relative;
-            z-index: 10;
-            background: #100b1a;
-            border-top: 3px solid #f2a63b;
-            padding: 12px;
-            text-align: center;
-            font-size: 10px;
-            color: #7e6b9c;
-            font-family: 'Press Start 2P', cursive;
+        /* --- หน้า SKILL VIEW --- */
+        #skill-view { display: none; padding: 20px 16px; }
+
+        .skill-list { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+
+        .skill-item {
+            background: #140d21; border: 2px solid #513e73; padding: 12px;
+            border-radius: 4px; display: flex; justify-content: space-between; align-items: center;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        .skill-info { display: flex; flex-direction: column; gap: 4px; }
+        .skill-title { color: #ffeb3b; font-weight: bold; font-size: 14px; }
+        .skill-lvl { color: #81c784; font-family: 'Press Start 2P', cursive; font-size: 10px; }
+
+        .lvl-up-btn {
+            background: #2e7d32; color: #fff; border: 2px solid #000;
+            font-size: 11px; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold;
+            box-shadow: 2px 2px 0 #000;
         }
 
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 23, 68, 0.7); }
-            70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(255, 23, 68, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 23, 68, 0); }
+        .lvl-up-btn:active { transform: translate(1px, 1px); box-shadow: 0 0 0; }
+
+        .add-btn {
+            background: #3949ab; color: white; border: 2px solid #000;
+            padding: 8px; font-family: 'Prompt', sans-serif; font-size: 12px;
+            margin-top: 12px; width: 100%; cursor: pointer; display: none; border-radius: 4px;
         }
 
-        @keyframes blink {
-            50% { opacity: 0.7; }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes pulse-ring { 0% { transform: scale(0.95); } 70% { transform: scale(1.15); } 100% { transform: scale(0.95); } }
+        @keyframes blink { 50% { opacity: 0.7; } }
     </style>
 </head>
 <body>
@@ -484,7 +409,6 @@
                     <span>40/50</span>
                 </div>
             </div>
-            <!-- แก้ไข Gold ได้ตรงนี้ -->
             <div class="gold-display">
                 🪙 <span id="text-gold" class="editable">500</span> G
             </div>
@@ -492,43 +416,38 @@
 
         <div class="viewport">
 
-            <!-- STATE 1: ซองจดหมาย -->
+            <!-- VIEW 1: ซองจดหมาย -->
             <div id="notification-view" class="pixel-box" onclick="handleBoxClick(event, showQuestDetail)">
                 <div class="envelope-wrapper">
                     <div class="red-dot-badge"></div>
-                    <div class="envelope-body">
-                        <div class="envelope-seal"></div>
-                    </div>
+                    <div class="envelope-body"><div class="envelope-seal"></div></div>
                 </div>
                 <div class="pixel-title editable" id="text-notif-title">! NEW QUEST !<br>RECEIVED</div>
                 <p class="pixel-sub editable" id="text-notif-sub">(แตะที่ซองจดหมายเพื่อเปิดอ่าน)</p>
             </div>
 
-            <!-- STATE 2: รายละเอียดภารกิจ -->
+            <!-- VIEW 2: รายละเอียดภารกิจ -->
             <div id="quest-detail-view" class="pixel-box">
                 <div class="parchment-title editable" id="text-quest-title">-- QUEST DETAILS --</div>
                 <div class="quest-description">
                     <span class="editable" id="text-quest-name"><strong>ภารกิจ: ปกป้องหมู่บ้านพิกเซล</strong></span><br>
-                    <span class="editable" id="text-quest-desc">พวกสไลม์ป่ากำลังบุกรุกหมู่บ้านทาบาตะ! โปรดช่วยชาวบ้านกำจัดพวกมัน และค้นหาสมบัติที่หายไปในถ้ำทิศตะวันออก</span>
+                    <span class="editable" id="text-quest-desc">พวกสไลม์ป่ากำลังบุกรุกหมู่บ้านทาบาตะ! โปรดช่วยชาวบ้านกำจัดพวกมัน</span>
                 </div>
-                
-                <!-- กล่องรางวัลภารกิจ (แก้ไข & เพิ่มบรรทัดรางวัลได้) -->
                 <div class="reward-box">
                     <strong>🎁 รางวัลภารกิจ:</strong>
                     <ul class="reward-list" id="reward-list">
                         <li class="reward-item">• <span class="editable">500 Gold</span></li>
                         <li class="reward-item">• <span class="editable">ดาบไม้ผู้กล้า x1</span></li>
                     </ul>
-                    <button class="add-reward-btn" id="add-reward-btn" onclick="addNewReward()">➕ เพิ่มของรางวัล</button>
+                    <button class="add-btn" id="add-reward-btn" onclick="addNewReward()">➕ เพิ่มของรางวัล</button>
                 </div>
-
                 <div class="btn-stack">
                     <button class="rpg-btn btn-accept" onclick="acceptQuest()">ยอมรับภารกิจ</button>
                     <button class="rpg-btn btn-decline" onclick="declineQuest()">ยกเลิก / ปฏิเสธ</button>
                 </div>
             </div>
 
-            <!-- STATE 3: รายการสิ่งที่ต้องทำ (To-Do List) -->
+            <!-- VIEW 3: รายการ To-Do -->
             <div id="todo-list-view" class="pixel-box">
                 <div class="todo-header editable" id="text-todo-header">QUEST OBJECTIVES</div>
                 <ul class="quest-item-list" id="quest-list">
@@ -538,20 +457,67 @@
                     </li>
                     <li class="quest-item" onclick="handleTaskClick(event, this)">
                         <div class="pixel-checkbox"></div>
-                        <span class="editable">ค้นหาสมบัติในถ้ำตะวันออก</span>
-                    </li>
-                    <li class="quest-item" onclick="handleTaskClick(event, this)">
-                        <div class="pixel-checkbox"></div>
                         <span class="editable">คุยกับหัวหน้าหมู่บ้าน</span>
                     </li>
                 </ul>
-                <button class="add-task-btn" id="add-task-btn" onclick="addNewTask()">➕ เพิ่มหัวข้อภารกิจใหม่</button>
+                <button class="add-btn" id="add-task-btn" onclick="addNewTask()">➕ เพิ่มหัวข้อภารกิจใหม่</button>
+            </div>
+
+            <!-- VIEW 4: หน้า STATUS ตัวละคร -->
+            <div id="status-view" class="pixel-box">
+                <div class="todo-header editable" id="text-status-header">CHARACTER STATUS</div>
+                <div class="status-grid" id="status-list">
+                    <div class="status-row">
+                        <span class="status-name editable">⚔️ ATK (พลังโจมตี)</span>
+                        <div><span class="status-val editable">45</span><button class="delete-btn" onclick="deleteItem(this)">🗑️</button></div>
+                    </div>
+                    <div class="status-row">
+                        <span class="status-name editable">🛡️ DEF (พลังป้องกัน)</span>
+                        <div><span class="status-val editable">28</span><button class="delete-btn" onclick="deleteItem(this)">🗑️</button></div>
+                    </div>
+                    <div class="status-row">
+                        <span class="status-name editable">⚡ SPD (ความเร็ว)</span>
+                        <div><span class="status-val editable">15</span><button class="delete-btn" onclick="deleteItem(this)">🗑️</button></div>
+                    </div>
+                </div>
+                <button class="add-btn" id="add-status-btn" onclick="addNewStatus()">➕ เพิ่มค่าสถานะใหม่</button>
+            </div>
+
+            <!-- VIEW 5: หน้า SKILL -->
+            <div id="skill-view" class="pixel-box">
+                <div class="todo-header editable" id="text-skill-header">SKILL TREE</div>
+                <div class="skill-list" id="skill-list">
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-title editable">🔥 Fireball (บอลเพลิง)</span>
+                            <span class="skill-lvl">Lv. <span class="lvl-num editable">1</span></span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <button class="lvl-up-btn" onclick="upgradeSkill(this)">+1 Up</button>
+                            <button class="delete-btn" onclick="deleteItem(this)">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-title editable">💚 Heal (เวทรักษา)</span>
+                            <span class="skill-lvl">Lv. <span class="lvl-num editable">1</span></span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <button class="lvl-up-btn" onclick="upgradeSkill(this)">+1 Up</button>
+                            <button class="delete-btn" onclick="deleteItem(this)">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-btn" id="add-skill-btn" onclick="addNewSkill()">➕ เพิ่มสกิลใหม่</button>
             </div>
 
         </div>
 
-        <div class="bottom-hud">
-            RPG MAKER 90s • FULLSCREEN APP
+        <!-- แถบ Navigation ด้านล่างสำหรับสลับหน้า -->
+        <div class="nav-bar">
+            <button class="nav-btn active" id="nav-quest" onclick="switchTab('quest')">📜 Quest</button>
+            <button class="nav-btn" id="nav-status" onclick="switchTab('status')">👤 Status</button>
+            <button class="nav-btn" id="nav-skill" onclick="switchTab('skill')">⚡ Skill</button>
         </div>
 
     </div>
@@ -559,13 +525,28 @@
     <script>
         let isEditing = false;
         let pageHistory = ['notification-view'];
+        let currentTab = 'quest';
 
-        window.onload = function() {
-            loadSavedData();
-        };
+        window.onload = function() { loadSavedData(); };
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (tab === 'quest') {
+                document.getElementById('nav-quest').classList.add('active');
+                navigateTo('notification-view');
+            } else if (tab === 'status') {
+                document.getElementById('nav-status').classList.add('active');
+                navigateTo('status-view');
+            } else if (tab === 'skill') {
+                document.getElementById('nav-skill').classList.add('active');
+                navigateTo('skill-view');
+            }
+        }
 
         function navigateTo(pageId) {
-            const views = ['notification-view', 'quest-detail-view', 'todo-list-view'];
+            const views = ['notification-view', 'quest-detail-view', 'todo-list-view', 'status-view', 'skill-view'];
             views.forEach(v => document.getElementById(v).style.display = 'none');
             
             document.getElementById(pageId).style.display = 'block';
@@ -581,7 +562,7 @@
                 pageHistory.pop();
                 const previousPage = pageHistory[pageHistory.length - 1];
                 
-                const views = ['notification-view', 'quest-detail-view', 'todo-list-view'];
+                const views = ['notification-view', 'quest-detail-view', 'todo-list-view', 'status-view', 'skill-view'];
                 views.forEach(v => document.getElementById(v).style.display = 'none');
                 document.getElementById(previousPage).style.display = 'block';
 
@@ -591,52 +572,73 @@
 
         function updateBackButton() {
             const backBtn = document.getElementById('back-btn');
-            if (pageHistory.length > 1) {
-                backBtn.style.display = 'flex';
-            } else {
-                backBtn.style.display = 'none';
-            }
+            backBtn.style.display = pageHistory.length > 1 ? 'flex' : 'none';
         }
 
         function showQuestDetail() { navigateTo('quest-detail-view'); }
         function declineQuest() { navigateTo('notification-view'); }
         function acceptQuest() { navigateTo('todo-list-view'); }
 
+        /* ระบบอัปเกรดระดับ Skill */
+        function upgradeSkill(btn) {
+            const lvlSpan = btn.closest('.skill-item').querySelector('.lvl-num');
+            let currentLvl = parseInt(lvlSpan.innerText) || 1;
+            lvlSpan.innerText = currentLvl + 1;
+            saveData();
+        }
+
         function toggleEditMode() {
             isEditing = !isEditing;
             const btn = document.getElementById('edit-btn');
             const app = document.getElementById('app-container');
-            const addTaskBtn = document.getElementById('add-task-btn');
-            const addRewardBtn = document.getElementById('add-reward-btn');
+            
+            const addBtns = document.querySelectorAll('.add-btn');
+            const delBtns = document.querySelectorAll('.delete-btn');
             const editables = document.querySelectorAll('.editable');
 
             if (isEditing) {
                 btn.innerText = "💾 บันทึกข้อมูล";
                 btn.classList.add('active');
                 app.classList.add('editing-active');
-                addTaskBtn.style.display = 'block';
-                addRewardBtn.style.display = 'inline-block';
-
+                
+                addBtns.forEach(b => b.style.display = 'block');
+                delBtns.forEach(b => b.style.display = 'inline-block');
                 editables.forEach(el => el.contentEditable = "true");
             } else {
                 btn.innerText = "✏️ โหมดแก้ไข";
                 btn.classList.remove('active');
                 app.classList.remove('editing-active');
-                addTaskBtn.style.display = 'none';
-                addRewardBtn.style.display = 'none';
 
+                addBtns.forEach(b => b.style.display = 'none');
+                delBtns.forEach(b => b.style.display = 'none');
                 editables.forEach(el => el.contentEditable = "false");
                 saveData();
                 alert("บันทึกการแก้ไขเรียบร้อยแล้ว!");
             }
         }
 
-        function handleBoxClick(event, callback) {
-            if (!isEditing) callback();
+        function handleBoxClick(event, callback) { if (!isEditing) callback(); }
+        function handleTaskClick(event, element) { if (!isEditing) element.classList.toggle('completed'); }
+
+        function deleteItem(btn) {
+            const parent = btn.closest('.status-row, .skill-item');
+            if (parent) parent.remove();
         }
 
-        function handleTaskClick(event, element) {
-            if (!isEditing) element.classList.toggle('completed');
+        function addNewStatus() {
+            const list = document.getElementById('status-list');
+            const div = document.createElement('div');
+            div.className = 'status-row';
+            div.innerHTML = `<span class="status-name editable" contenteditable="true">✨ ค่าใหม่</span><div><span class="status-val editable" contenteditable="true">10</span><button class="delete-btn" style="display:inline-block" onclick="deleteItem(this)">🗑️</button></div>`;
+            list.appendChild(div);
+        }
+
+        function addNewSkill() {
+            const list = document.getElementById('skill-list');
+            const div = document.createElement('div');
+            div.className = 'skill-item';
+            div.innerHTML = `<div class="skill-info"><span class="skill-title editable" contenteditable="true">✨ สกิลใหม่</span><span class="skill-lvl">Lv. <span class="lvl-num editable" contenteditable="true">1</span></span></div><div style="display:flex; align-items:center; gap:6px;"><button class="lvl-up-btn" onclick="upgradeSkill(this)">+1 Up</button><button class="delete-btn" style="display:inline-block" onclick="deleteItem(this)">🗑️</button></div>`;
+            list.appendChild(div);
         }
 
         function addNewTask() {
@@ -644,7 +646,7 @@
             const li = document.createElement('li');
             li.className = 'quest-item';
             li.setAttribute('onclick', 'handleTaskClick(event, this)');
-            li.innerHTML = `<div class="pixel-checkbox"></div><span class="editable" contenteditable="true">ภารกิจใหม่ (แตะเพื่อแก้)</span>`;
+            li.innerHTML = `<div class="pixel-checkbox"></div><span class="editable" contenteditable="true">ภารกิจใหม่</span>`;
             list.appendChild(li);
         }
 
@@ -663,6 +665,8 @@
             });
             data['quest-list-html'] = document.getElementById('quest-list').innerHTML;
             data['reward-list-html'] = document.getElementById('reward-list').innerHTML;
+            data['status-list-html'] = document.getElementById('status-list').innerHTML;
+            data['skill-list-html'] = document.getElementById('skill-list').innerHTML;
             localStorage.setItem('rpg_quest_data', JSON.stringify(data));
         }
 
@@ -671,11 +675,11 @@
             if (saved) {
                 const data = JSON.parse(saved);
                 for (let id in data) {
-                    if (id === 'quest-list-html') {
-                        document.getElementById('quest-list').innerHTML = data[id];
-                    } else if (id === 'reward-list-html') {
-                        document.getElementById('reward-list').innerHTML = data[id];
-                    } else {
+                    if (id === 'quest-list-html') document.getElementById('quest-list').innerHTML = data[id];
+                    else if (id === 'reward-list-html') document.getElementById('reward-list').innerHTML = data[id];
+                    else if (id === 'status-list-html') document.getElementById('status-list').innerHTML = data[id];
+                    else if (id === 'skill-list-html') document.getElementById('skill-list').innerHTML = data[id];
+                    else {
                         const el = document.getElementById(id);
                         if (el) el.innerHTML = data[id];
                     }
